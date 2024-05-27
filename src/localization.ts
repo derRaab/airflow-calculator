@@ -5,6 +5,7 @@ import { I18n } from "i18n-js";
 interface Translation {
   appName: string;
   duct: string;
+  iso: string;
   pipe: string;
 }
 
@@ -18,24 +19,38 @@ type TranslationKey = keyof Translation;
 const translations: Translations = {
   de: {
     appName: "Lüftungsrechner",
-    pipe: "Rohr",
     duct: "Kanal",
+    iso: "de",
+    pipe: "Rohr",
   },
   en: {
     appName: "Airflow Calculator",
-    pipe: "Pipe",
     duct: "Duct",
+    iso: "en",
+    pipe: "Pipe",
   },
+};
+
+const getFirstLanguageTag = () => {
+  const locales = Localization.getLocales();
+  if (locales?.length > 0) {
+    return locales[0].languageTag;
+  }
+  return "en";
 };
 
 // UTILS
 const i18n = new I18n(translations, {
   defaultLocale: "en",
   enableFallback: true,
-  locale: Localization.getLocales()[0].languageTag,
+  locale: getFirstLanguageTag(),
 });
 
 // FUNCTIONS
 export const translate = (key: TranslationKey) => {
   return i18n.t(key);
+};
+
+export const changeLocale = (locale: string) => {
+  i18n.locale = locale;
 };
