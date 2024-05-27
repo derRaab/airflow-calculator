@@ -11,10 +11,9 @@ export default function Index() {
         justifyContent: "center",
       }}
     >
-      <Link href="/duct">Go to Duct</Link>
-      <Link href="/info">Go to Info</Link>
-      <Link href="/pipe">Go to Pipe</Link>
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+      <Link href="./flowrate">Go to Flow Rate</Link>
+      <Link href="./velocity">Go to Velocity</Link>
+      <Text>Edit app/duct/index.tsx to edit this screen.</Text>
     </View>
   );
 }
