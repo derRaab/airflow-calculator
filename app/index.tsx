@@ -1,20 +1,51 @@
+import { translate } from "@/src/localization";
 import { Link } from "expo-router";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
 export default function Index() {
   return (
-    <View
-      style={{
-        alignItems: "center",
-        flex: 1,
-        gap: 10,
-        justifyContent: "center",
-      }}
-    >
-      <Link href="/duct">Go to Duct</Link>
-      <Link href="/info">Go to Info</Link>
-      <Link href="/pipe">Go to Pipe</Link>
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+    <View style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "column",
+          }}
+        >
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "#CCCCCC",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Link href="./(root)/duct">{translate("duct")}</Link>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "#DDDDDD",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Link href="./(root)/pipe">{translate("pipe")}</Link>
+          </View>
+        </View>
+        <View style={{ height: 44 }}>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "#EEEEEE",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Link href="./(root)/info">Info</Link>
+          </View>
+        </View>
+      </View>
     </View>
   );
 }
