@@ -1,3 +1,4 @@
+import { translate } from "@/src/localization";
 import { Link } from "expo-router";
 import { View } from "react-native";
 
@@ -18,7 +19,7 @@ export default function Index() {
             justifyContent: "center",
           }}
         >
-          <Link href="./flowrate">Flow rate</Link>
+          <Link href="./flowrate">{translate("flowrate")}</Link>
         </View>
         <View
           style={{
@@ -28,7 +29,7 @@ export default function Index() {
             justifyContent: "center",
           }}
         >
-          <Link href="./velocity">Velocity</Link>
+          <Link href="./velocity">{translate("velocity")}</Link>
         </View>
       </View>
     </View>

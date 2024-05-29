@@ -5,8 +5,10 @@ import { I18n } from "i18n-js";
 interface Translation {
   appName: string;
   duct: string;
+  flowrate: string;
   iso: string;
   pipe: string;
+  velocity: string;
 }
 
 interface Translations {
@@ -20,14 +22,18 @@ const translations: Translations = {
   de: {
     appName: "Lüftungsrechner",
     duct: "Kanal",
+    flowrate: "Volumenstrom",
     iso: "de",
     pipe: "Rohr",
+    velocity: "Geschwindigkeit",
   },
   en: {
     appName: "Airflow Calculator",
     duct: "Duct",
+    flowrate: "Flow Rate",
     iso: "en",
     pipe: "Pipe",
+    velocity: "Velocity",
   },
 };
 
