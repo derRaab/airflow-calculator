@@ -10,7 +10,7 @@ export default function Index() {
         justifyContent: "center",
       }}
     >
-      <Text>Edit app/info/index.tsx to edit this screen.</Text>
+      <Text>Info</Text>
     </View>
   );
 }
