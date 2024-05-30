@@ -1,4 +1,4 @@
-import { MaterialDesign3ColorTheme } from "./materialDesign3ThemeTypes";
+import { MaterialDesign3ColorTheme } from "./m3/MaterialDesign3ColorTheme";
 
 // Create as json with https://material-foundation.github.io/material-theme-builder/
 // Added TypeScript types and change some keys to camelCase
