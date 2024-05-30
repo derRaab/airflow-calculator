@@ -1,39 +1,67 @@
 import * as Localization from "expo-localization";
 import { I18n } from "i18n-js";
 
-// TYPES
-interface Translation {
+// Transitions without interpolation
+interface TranslationInterpolate0 {
   appName: string;
   duct: string;
   flowrate: string;
   iso: string;
   pipe: string;
   velocity: string;
+  height: string;
+  width: string;
+  ductVelocity: string;
 }
+
+// Transitions with one {{a}} interpolation
+interface TranslationInterpolate1 {
+  a_inCubicMetersPerHour: string;
+  a_inMeters: string;
+  a_inMetersPerSecond: string;
+  a_inMillimeters: string;
+}
+
+// All translations combined
+interface Translation
+  extends TranslationInterpolate0,
+    TranslationInterpolate1 {}
 
 interface Translations {
   [key: string]: Translation;
 }
 
-type TranslationKey = keyof Translation;
-
-// DATA
+// Translation values
 const translations: Translations = {
   de: {
+    a_inCubicMetersPerHour: "{{a}} in Kubikmeter pro Stunde",
+    a_inMeters: "{{a}} in Meter",
+    a_inMetersPerSecond: "{{a}} in Meter pro Sekunde",
+    a_inMillimeters: "{{a}} in Millimeter",
     appName: "Lüftungsrechner",
     duct: "Kanal",
+    ductVelocity: "Kanal-Geschwindigkeit",
     flowrate: "Volumenstrom",
+    height: "Höhe",
     iso: "de",
     pipe: "Rohr",
     velocity: "Geschwindigkeit",
+    width: "Breite",
   },
   en: {
+    a_inCubicMetersPerHour: "{{a}} in cubic meters per hour",
+    a_inMeters: "{{a}} in meters",
+    a_inMetersPerSecond: "{{a}} in meters per second",
+    a_inMillimeters: "{{a}} in millimeters",
     appName: "Airflow Calculator",
-    duct: "Duct",
-    flowrate: "Flow Rate",
+    duct: "duct",
+    ductVelocity: "duct velocity",
+    flowrate: "flow rate",
+    height: "height",
     iso: "en",
-    pipe: "Pipe",
-    velocity: "Velocity",
+    pipe: "pipe",
+    velocity: "velocity",
+    width: "width",
   },
 };
 
@@ -45,18 +73,30 @@ const getFirstLanguageTag = () => {
   return "en";
 };
 
-// UTILS
 const i18n = new I18n(translations, {
   defaultLocale: "en",
   enableFallback: true,
   locale: getFirstLanguageTag(),
 });
 
-// FUNCTIONS
-export const translate = (key: TranslationKey) => {
-  return i18n.t(key);
-};
-
 export const changeLocale = (locale: string) => {
   i18n.locale = locale;
+};
+
+// Translate function overloading based on key!
+
+type TranslationKey = keyof Translation;
+type TranslationInterpolate0Key = keyof TranslationInterpolate0;
+type TranslationInterpolate1Key = keyof TranslationInterpolate1;
+
+type IOverload = {
+  (key: TranslationInterpolate0Key): string;
+  (key: TranslationInterpolate1Key, a: string): string;
+};
+
+export const translate: IOverload = (key: TranslationKey, a?: string) => {
+  if (a) {
+    return i18n.t(key, { a });
+  }
+  return i18n.t(key);
 };
