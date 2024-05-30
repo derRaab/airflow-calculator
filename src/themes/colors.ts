@@ -127,7 +127,7 @@ export const materialTheme: MaterialDesign3ColorTheme = {
       surfaceContainerHigh: "#EBE7EF",
       surfaceContainerHighest: "#E5E1E9",
     },
-    "light-high-contrast": {
+    lightHighContrast: {
       primary: "#1F1A50",
       surfaceTint: "#5C5891",
       onPrimary: "#FFFFFF",
