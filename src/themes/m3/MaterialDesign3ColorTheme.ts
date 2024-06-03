@@ -107,3 +107,40 @@ interface MaterialDesign3ColorPalette {
   "99": string;
   "100": string;
 }
+
+type MaterialDesign3ColorSchemeName = keyof MaterialDesign3ColorSchemes;
+
+const isColorSchemeName = (
+  name: string,
+): name is MaterialDesign3ColorSchemeName => {
+  switch (name) {
+    case "light":
+    case "lightMediumContrast":
+    case "lightHighContrast":
+    case "dark":
+    case "darkMediumContrast":
+    case "darkHighContrast":
+      return true;
+  }
+  return false;
+};
+
+export const selectColorScheme = (
+  colorSchemes: MaterialDesign3ColorSchemes,
+  preferredName: string | null | undefined,
+): MaterialDesign3ColorScheme => {
+  // Invalid name
+  if (!preferredName || !isColorSchemeName(preferredName)) {
+    return colorSchemes.light;
+  }
+  // Exact match
+  if (colorSchemes[preferredName]) {
+    return colorSchemes[preferredName];
+  }
+  // Fallback dark
+  if (preferredName.startsWith("dark")) {
+    return colorSchemes.dark;
+  }
+  // Fallback light
+  return colorSchemes.light;
+};
