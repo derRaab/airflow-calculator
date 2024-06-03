@@ -5,13 +5,20 @@ import { I18n } from "i18n-js";
 interface TranslationInterpolate0 {
   appName: string;
   duct: string;
+  ductFlowrate: string;
+  ductVelocity: string;
   flowrate: string;
+  height: string;
   iso: string;
   pipe: string;
+  pipeFlowrate: string;
+  pipeVelocity: string;
+  unitCubicMetersPerHour: string;
+  unitMetersPerSecond: string;
+  unitMillimeters: string;
+  unitSquareMeters: string;
   velocity: string;
-  height: string;
   width: string;
-  ductVelocity: string;
 }
 
 // Transitions with one {{a}} interpolation
@@ -40,11 +47,18 @@ const translations: Translations = {
     a_inMillimeters: "{{a}} in Millimeter",
     appName: "Lüftungsrechner",
     duct: "Kanal",
+    ductFlowrate: "Kanal-Volumenstrom",
     ductVelocity: "Kanal-Geschwindigkeit",
     flowrate: "Volumenstrom",
     height: "Höhe",
     iso: "de",
     pipe: "Rohr",
+    pipeFlowrate: "Rohr-Volumenstrom",
+    pipeVelocity: "Rohr-Geschwindigkeit",
+    unitCubicMetersPerHour: "m³/h",
+    unitMetersPerSecond: "m/s",
+    unitMillimeters: "mm",
+    unitSquareMeters: "m²",
     velocity: "Geschwindigkeit",
     width: "Breite",
   },
@@ -55,11 +69,18 @@ const translations: Translations = {
     a_inMillimeters: "{{a}} in millimeters",
     appName: "Airflow Calculator",
     duct: "duct",
+    ductFlowrate: "duct flow rate",
     ductVelocity: "duct velocity",
     flowrate: "flow rate",
     height: "height",
     iso: "en",
     pipe: "pipe",
+    pipeFlowrate: "pipe flow rate",
+    pipeVelocity: "pipe velocity",
+    unitCubicMetersPerHour: "m³/h",
+    unitMetersPerSecond: "m/s",
+    unitMillimeters: "mm",
+    unitSquareMeters: "m²",
     velocity: "velocity",
     width: "width",
   },
