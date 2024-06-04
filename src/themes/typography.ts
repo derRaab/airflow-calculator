@@ -1,4 +1,3 @@
-
 import { Platform } from "react-native";
 import { MaterialDesign3Typography } from "./m3/MaterialDesign3Typography";
 
@@ -7,8 +6,8 @@ const iosFontFamily = "San Francisco";
 const fontFamily = Platform.OS === "ios" ? iosFontFamily : androidFontFamily;
 
 // @see https://m3.material.io/styles/typography/type-scale-tokens
-export const typography : MaterialDesign3Typography = {
-  displayLarge : {
+export const typography: MaterialDesign3Typography = {
+  displayLarge: {
     fontFamily,
     fontSize: 57,
     fontWeight: "400",
@@ -77,7 +76,7 @@ export const typography : MaterialDesign3Typography = {
     fontWeight: "400",
     letterSpacing: 0.5,
     lineHeight: 24,
-  };
+  },
   bodyMedium: {
     fontFamily,
     fontSize: 14,
@@ -113,4 +112,4 @@ export const typography : MaterialDesign3Typography = {
     letterSpacing: 0.5,
     lineHeight: 16,
   },
-}
+};
