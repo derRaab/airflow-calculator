@@ -39,6 +39,7 @@ export const calculateDuctVelocity = (calculation: Calculation) => {
   newCalculation.areaUnit = "m2";
 
   newCalculation.result = newCalculation.flowrate / areaM2 / 3600;
+  newCalculation.resultUnit = "m_s";
 
   // berechnungsscheiß / calculation shit
   // DuctVelocityVO.resultDuctVelocity =  DuctVelocityVO.volumeflowDuctVelocity / ( ( DuctVelocityVO.heightDuctVelocity/1000 ) * ( DuctVelocityVO.widthDuctVelocity/1000 ) ) / 3600;

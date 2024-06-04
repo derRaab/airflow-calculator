@@ -67,10 +67,9 @@ describe("calculation", () => {
         calculateDuctArea(calculationIn.width, calculationIn.height),
       ),
     );
-
     expect(calculationOut.areaUnit).toBe("m2");
-
     expect(calculationOut.result.toFixed(6)).toBe("0.277778");
+    expect(calculationOut.resultUnit).toBe("m_s");
   });
 
   it("pipe flow rate", () => {
