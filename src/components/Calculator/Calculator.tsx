@@ -1,8 +1,6 @@
 import { Calculation } from "@/src/calculation";
-import { translate } from "@/src/localization";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
-import { capitalizeFirstLetter } from "@/src/utils/stringutils";
 import React, { FC } from "react";
 import { View } from "react-native";
 import { EdgeInsets } from "react-native-safe-area-context";
@@ -72,44 +70,13 @@ export const Calculator: FC<CalculatorProps> = ({
     onInputChange(newCalculation);
   };
 
-  const resultDescriptionFromCalulation = (calculation: Calculation) => {
-    const object = calculation.object;
-    const type = calculation.type;
-
-    if (object === "duct") {
-      if (type === "flowrate") {
-        return translate("a_inMetersPerSecond", translate("ductFlowrate"));
-      }
-      if (type === "velocity") {
-        return translate("a_inMetersPerSecond", translate("ductVelocity"));
-      }
-    }
-
-    if (object === "pipe") {
-      if (type === "flowrate") {
-        return translate("a_inMetersPerSecond", translate("pipeFlowrate"));
-      }
-      if (type === "velocity") {
-        return translate("a_inMetersPerSecond", translate("pipeVelocity"));
-      }
-    }
-
-    return capitalizeFirstLetter(
-      translate("a_inMeters", calculation.result.toString()),
-    ) as string;
-  };
-
-  const resultUnit = translate("unitMetersPerSecond") as string;
-
   return (
     <View style={surfaceStyle}>
       <CalculatorResult
-        description={resultDescriptionFromCalulation(calculation)}
+        calculation={calculation}
         insets={resultInsets}
         layout={layout}
         minHeight={resultMinHeight}
-        result={calculation.result}
-        unit={resultUnit}
       />
       {calculation.object === "duct" && (
         <CalculatorDuctAreaInput
