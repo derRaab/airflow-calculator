@@ -1,13 +1,19 @@
 import {
+  Calculation,
   calculateDuctArea,
   calculateDuctFlowrate,
   calculateDuctVelocity,
   calculatePipeArea,
   calculatePipeFlowrate,
   calculatePipeVelocity,
+  convertMm2ToM2,
 } from "@/src/calculation";
 
 describe("calculation", () => {
+  it("convert mm2 to m2", () => {
+    expect(convertMm2ToM2(1_000_000)).toBe(1);
+  });
+
   it("calculate pipe area", () => {
     expect(calculatePipeArea(1).toFixed(10)).toBe("0.7853981634");
   });
@@ -24,8 +30,47 @@ describe("calculation", () => {
     expect(calculateDuctFlowrate()).toBe(1.1);
   });
 
-  it("duct velocity", () => {
-    expect(calculateDuctVelocity()).toBe(2.2);
+  it("calculate duct velocity", () => {
+    const calculationIn: Calculation = {
+      area: 0,
+      areaUnit: "m2",
+      diameter: 0,
+      diameterUnit: "mm",
+      flowrate: 1_000,
+      flowrateUnit: "m3_h",
+      height: 1_000,
+      heightUnit: "mm",
+      object: "duct",
+      result: 0,
+      resultUnit: "m_s",
+      type: "velocity",
+      width: 1_000,
+      widthUnit: "mm",
+    };
+    const calculationOut: Calculation = calculateDuctVelocity(calculationIn);
+
+    // Expect unchanged values
+    expect(calculationOut.diameter).toBe(calculationIn.diameter);
+    expect(calculationOut.diameterUnit).toBe(calculationIn.diameterUnit);
+    expect(calculationOut.flowrate).toBe(calculationIn.flowrate);
+    expect(calculationOut.flowrateUnit).toBe(calculationIn.flowrateUnit);
+    expect(calculationOut.height).toBe(calculationIn.height);
+    expect(calculationOut.heightUnit).toBe(calculationIn.heightUnit);
+    expect(calculationOut.object).toBe(calculationIn.object);
+    expect(calculationOut.type).toBe(calculationIn.type);
+    expect(calculationOut.width).toBe(calculationIn.width);
+    expect(calculationOut.widthUnit).toBe(calculationIn.widthUnit);
+
+    // Expect calculated values
+    expect(calculationOut.area).toBe(
+      convertMm2ToM2(
+        calculateDuctArea(calculationIn.width, calculationIn.height),
+      ),
+    );
+
+    expect(calculationOut.areaUnit).toBe("m2");
+
+    expect(calculationOut.result.toFixed(6)).toBe("0.277778");
   });
 
   it("pipe flow rate", () => {
