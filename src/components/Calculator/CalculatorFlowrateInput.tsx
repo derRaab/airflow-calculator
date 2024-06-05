@@ -1,4 +1,5 @@
 import { Calculation } from "@/src/calculation";
+import { translate } from "@/src/localization";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
 import React, { FC, useState } from "react";
@@ -32,15 +33,22 @@ export const CalculatorFlowrateInput: FC<CalculatorFlowrateInputProps> = ({
     onFlowrateChange(newFlowRate);
   };
 
+  const description = translate(
+    "a_inCubicMetersPerHour",
+    translate("flowrate"),
+  );
+  const placeholder = translate("flowrate");
+  const unit = translate("m3_h");
+
   return (
     <View style={containerStyle}>
       <CalculatorTextInput
-        description={"Flowrate description"}
+        description={description}
         layout={layout}
         minHeight={0}
         onChangeNumber={onInputChange}
-        placeholder={"Flowrate placeholder"}
-        unit={"Flowrate unit"}
+        placeholder={placeholder}
+        unit={unit}
         value={flowrate}
       />
     </View>
