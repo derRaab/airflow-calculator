@@ -2,7 +2,7 @@ import { Calculation } from "@/src/calculation";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
 import React, { FC } from "react";
-import { View } from "react-native";
+import { KeyboardAvoidingView, ScrollView, View } from "react-native";
 import { EdgeInsets } from "react-native-safe-area-context";
 import { CalculatorDuctAreaInput, DuctArea } from "./CalculatorDuctAreaInput";
 import { CalculatorFlowrateInput } from "./CalculatorFlowrateInput";
@@ -78,28 +78,32 @@ export const Calculator: FC<CalculatorProps> = ({
         layout={layout}
         minHeight={resultMinHeight}
       />
-      {calculation.object === "duct" && (
-        <CalculatorDuctAreaInput
-          calculation={calculation}
-          layout={layout}
-          minHeight={0}
-          onAreaChange={onDuctAreaChange}
-        />
-      )}
-      {calculation.object === "pipe" && (
-        <CalculatorPipeAreaInput
-          calculation={calculation}
-          layout={layout}
-          minHeight={0}
-          onAreaChange={onPipeAreaChange}
-        />
-      )}
-      <CalculatorFlowrateInput
-        calculation={calculation}
-        layout={layout}
-        minHeight={0}
-        onFlowrateChange={onFlowrateChange}
-      />
+      <KeyboardAvoidingView behavior="height">
+        <ScrollView>
+          {calculation.object === "duct" && (
+            <CalculatorDuctAreaInput
+              calculation={calculation}
+              layout={layout}
+              minHeight={0}
+              onAreaChange={onDuctAreaChange}
+            />
+          )}
+          {calculation.object === "pipe" && (
+            <CalculatorPipeAreaInput
+              calculation={calculation}
+              layout={layout}
+              minHeight={0}
+              onAreaChange={onPipeAreaChange}
+            />
+          )}
+          <CalculatorFlowrateInput
+            calculation={calculation}
+            layout={layout}
+            minHeight={0}
+            onFlowrateChange={onFlowrateChange}
+          />
+        </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 };
