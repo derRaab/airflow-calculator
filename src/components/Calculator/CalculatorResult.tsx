@@ -73,8 +73,10 @@ export const CalculatorResult: FC<CalculatorResultProps> = ({
       <Text style={descriptionStyle}>
         {resultDescriptionFromCalulation(calculation)}
       </Text>
-      <Text style={resultStyle}>{calculation.result}</Text>
-      <Text style={unitStyle}>{translate(calculation.resultUnit)}</Text>
+      <Text style={resultStyle}>
+        <Text>{calculation.result}</Text>
+        <Text style={unitStyle}>{" " + translate(calculation.resultUnit)}</Text>
+      </Text>
     </View>
   );
 };
