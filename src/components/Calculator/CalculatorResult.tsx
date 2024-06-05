@@ -36,7 +36,7 @@ export const CalculatorResult: FC<CalculatorResultProps> = ({
     color: colorScheme.onPrimary,
   };
   const resultStyle = {
-    ...typography.headlineMedium,
+    ...typography.displayMedium,
     color: colorScheme.onPrimary,
   };
   const unitStyle = { ...typography.labelLarge, color: colorScheme.onPrimary };
