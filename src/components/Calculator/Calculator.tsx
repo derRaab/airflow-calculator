@@ -96,7 +96,6 @@ export const Calculator: FC<CalculatorProps> = ({
       )}
       <CalculatorFlowrateInput
         calculation={calculation}
-        insets={horizontalInsets}
         layout={layout}
         minHeight={0}
         onFlowrateChange={onFlowrateChange}
