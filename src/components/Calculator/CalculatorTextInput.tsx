@@ -1,28 +1,28 @@
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
 import { typography } from "@/src/themes/typography";
+import { lineHeightPadding } from "@/src/utils/textStyleUtils";
 import { FC, useState } from "react";
 import { StyleProp, Text, TextInput, View, ViewStyle } from "react-native";
 
 interface CalculatorTextInputProps {
-  value: number;
   description: string;
-  placeholder: string;
-  minHeight: number;
-  unit: string;
-  onChangeNumber: (number: number) => void;
-
   layout: MaterialDesign3Layout;
+  minHeight: number;
+  onChangeNumber: (number: number) => void;
+  placeholder: string;
+  unit: string;
+  value: number;
 }
 
 export const CalculatorTextInput: FC<CalculatorTextInputProps> = ({
-  value,
   description,
-  placeholder,
+  layout,
   minHeight,
   onChangeNumber,
+  placeholder,
   unit,
-  layout,
+  value,
 }) => {
   const colorScheme = usePreferredColorScheme();
   const containerStyle: StyleProp<ViewStyle> = {
@@ -30,6 +30,12 @@ export const CalculatorTextInput: FC<CalculatorTextInputProps> = ({
     minHeight,
     padding: layout.padding,
   };
+  const inputContainerStyle: StyleProp<ViewStyle> = {
+    flexDirection: "row",
+    gap: layout.gap,
+    alignItems: "flex-end",
+  };
+
   const descriptionStyle = {
     ...typography.labelLarge,
     color: colorScheme.onSurface,
@@ -38,7 +44,10 @@ export const CalculatorTextInput: FC<CalculatorTextInputProps> = ({
     ...typography.headlineMedium,
     color: colorScheme.onSurface,
   };
-  const unitStyle = { ...typography.labelLarge, color: colorScheme.onSurface };
+  const unitStyle = {
+    ...typography.labelLarge,
+    color: colorScheme.onSurface,
+  };
   const stringToValue = (text: string) => {
     const value = parseFloat(text);
     if (isNaN(value)) {
@@ -54,24 +63,28 @@ export const CalculatorTextInput: FC<CalculatorTextInputProps> = ({
   };
   const [displayValue, setDisplayValue] = useState(valueToString(value));
   const onChangeText = (text: string) => {
-    console.log(text);
     const value = stringToValue(text);
     const string = valueToString(value);
     setDisplayValue(string);
     onChangeNumber(value);
   };
 
+  unitStyle.paddingBottom =
+    lineHeightPadding(textInputStyle) - lineHeightPadding(unitStyle);
+
   return (
     <View style={containerStyle}>
       <Text style={descriptionStyle}>{description}</Text>
-      <TextInput
-        keyboardType="numeric"
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        style={textInputStyle}
-        value={displayValue}
-      ></TextInput>
-      <Text style={unitStyle}>{unit}</Text>
+      <View style={inputContainerStyle}>
+        <TextInput
+          keyboardType="numeric"
+          onChangeText={onChangeText}
+          placeholder={placeholder}
+          style={textInputStyle}
+          value={displayValue}
+        ></TextInput>
+        <Text style={unitStyle}>{unit}</Text>
+      </View>
     </View>
   );
 };
