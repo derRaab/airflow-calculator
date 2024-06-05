@@ -2,10 +2,11 @@ export interface CalculationUnits {
   m3_h: string;
   m_s: string;
   mm: string;
+  mm2: string;
   m2: string;
 }
 
-type CalculationUnit = keyof CalculationUnits;
+export type CalculationUnit = keyof CalculationUnits;
 
 export interface Calculation {
   area: number;
