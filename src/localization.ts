@@ -5,6 +5,8 @@ import { CalculationUnits } from "./calculation";
 // Transitions without interpolation
 interface TranslationInterpolate0 extends CalculationUnits {
   appName: string;
+  area: string;
+  diameter: string;
   duct: string;
   ductFlowrate: string;
   ductVelocity: string;
@@ -24,6 +26,7 @@ interface TranslationInterpolate1 {
   a_inMeters: string;
   a_inMetersPerSecond: string;
   a_inMillimeters: string;
+  a_inSquareMeters: string;
 }
 
 // All translations combined
@@ -42,8 +45,11 @@ const translations: Translations = {
     a_inMeters: "{{a}} in Meter",
     a_inMetersPerSecond: "{{a}} in Meter pro Sekunde",
     a_inMillimeters: "{{a}} in Millimeter",
+    a_inSquareMeters: "{{a}} in Quadratmeter",
 
     appName: "Lüftungsrechner",
+    area: "Fläche",
+    diameter: "Durchmesser",
     duct: "Kanal",
     ductFlowrate: "Kanal-Volumenstrom",
     ductVelocity: "Kanal-Geschwindigkeit",
@@ -54,6 +60,7 @@ const translations: Translations = {
     m2: "m²",
     m3_h: "m³/h",
     mm: "mm",
+    mm2: "mm²",
     pipe: "Rohr",
     pipeFlowrate: "Rohr-Volumenstrom",
     pipeVelocity: "Rohr-Geschwindigkeit",
@@ -65,8 +72,11 @@ const translations: Translations = {
     a_inMeters: "{{a}} in meters",
     a_inMetersPerSecond: "{{a}} in meters per second",
     a_inMillimeters: "{{a}} in millimeters",
+    a_inSquareMeters: "{{a}} in square meters",
 
     appName: "Airflow Calculator",
+    area: "area",
+    diameter: "diameter",
     duct: "duct",
     ductFlowrate: "duct flow rate",
     ductVelocity: "duct velocity",
@@ -77,6 +87,7 @@ const translations: Translations = {
     m2: "m²",
     m3_h: "m³/h",
     mm: "mm",
+    mm2: "mm²",
     pipe: "pipe",
     pipeFlowrate: "pipe flow rate",
     pipeVelocity: "pipe velocity",
