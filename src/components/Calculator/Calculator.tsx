@@ -8,6 +8,7 @@ import { CalculatorDuctAreaInput, DuctArea } from "./CalculatorDuctAreaInput";
 import { CalculatorFlowrateInput } from "./CalculatorFlowrateInput";
 import { CalculatorPipeAreaInput, PipeArea } from "./CalculatorPipeAreaInput";
 import { CalculatorResult } from "./CalculatorResult";
+import { CalculatorVelocityInput } from "./CalculatorVelocityInput";
 
 interface CalculatorProps {
   calculation: Calculation;
@@ -70,6 +71,14 @@ export const Calculator: FC<CalculatorProps> = ({
     onInputChange(newCalculation);
   };
 
+  const onVelocityChange = (velocity: number) => {
+    const newCalculation: Calculation = {
+      ...calculation,
+      velocity,
+    };
+    onInputChange(newCalculation);
+  };
+
   return (
     <View style={surfaceStyle}>
       <CalculatorResult
@@ -96,12 +105,24 @@ export const Calculator: FC<CalculatorProps> = ({
               onAreaChange={onPipeAreaChange}
             />
           )}
-          <CalculatorFlowrateInput
-            calculation={calculation}
-            layout={layout}
-            minHeight={0}
-            onFlowrateChange={onFlowrateChange}
-          />
+
+          {calculation.type === "flowrate" && (
+            <CalculatorVelocityInput
+              calculation={calculation}
+              layout={layout}
+              minHeight={0}
+              onVelocityChange={onVelocityChange}
+            />
+          )}
+
+          {calculation.type === "velocity" && (
+            <CalculatorFlowrateInput
+              calculation={calculation}
+              layout={layout}
+              minHeight={0}
+              onFlowrateChange={onFlowrateChange}
+            />
+          )}
         </ScrollView>
       </KeyboardAvoidingView>
     </View>
