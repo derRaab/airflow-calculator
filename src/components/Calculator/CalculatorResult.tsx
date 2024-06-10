@@ -65,7 +65,7 @@ export const CalculatorResult: FC<CalculatorResultProps> = ({
 
     if (object === "duct") {
       if (type === "flowrate") {
-        return translate("a_inMetersPerSecond", translate("ductFlowrate"));
+        return translate("a_inCubicMetersPerHour", translate("ductFlowrate"));
       }
       if (type === "velocity") {
         return translate("a_inMetersPerSecond", translate("ductVelocity"));
@@ -74,7 +74,7 @@ export const CalculatorResult: FC<CalculatorResultProps> = ({
 
     if (object === "pipe") {
       if (type === "flowrate") {
-        return translate("a_inMetersPerSecond", translate("pipeFlowrate"));
+        return translate("a_inCubicMetersPerHour", translate("pipeFlowrate"));
       }
       if (type === "velocity") {
         return translate("a_inMetersPerSecond", translate("pipeVelocity"));
