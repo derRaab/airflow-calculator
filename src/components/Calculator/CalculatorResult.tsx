@@ -5,7 +5,7 @@ import { MaterialDesign3Layout } from "@/src/themes/layout";
 import { typography } from "@/src/themes/typography";
 import { capitalizeFirstLetter } from "@/src/utils/stringutils";
 import { FC } from "react";
-import { StyleProp, Text, View, ViewStyle } from "react-native";
+import { StyleProp, Text, TextStyle, View, ViewStyle } from "react-native";
 import { EdgeInsets } from "react-native-safe-area-context";
 
 interface CalculatorResultProps {
@@ -22,6 +22,8 @@ export const CalculatorResult: FC<CalculatorResultProps> = ({
   minHeight,
 }) => {
   const colorScheme = usePreferredColorScheme();
+
+  // Container settings
   const containerStyle: StyleProp<ViewStyle> = {
     backgroundColor: colorScheme.primary,
     gap: layout.gap,
@@ -31,15 +33,31 @@ export const CalculatorResult: FC<CalculatorResultProps> = ({
     paddingRight: insets.right,
     paddingTop: insets.top,
   };
-  const descriptionStyle = {
+
+  const resultContainerStyle: ViewStyle = {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "flex-end",
+  };
+
+  // Font settings
+  const descriptionStyle: TextStyle = {
     ...typography.labelLarge,
+
     color: colorScheme.onPrimary,
+    textAlign: "center",
   };
   const resultStyle = {
-    ...typography.displayMedium,
+    ...typography.displayLarge,
+
+    color: colorScheme.onPrimary,
+    flexShrink: 1,
+  };
+  const unitStyle = {
+    ...typography.labelLarge,
+
     color: colorScheme.onPrimary,
   };
-  const unitStyle = { ...typography.labelLarge, color: colorScheme.onPrimary };
 
   const resultDescriptionFromCalulation = (calculation: Calculation) => {
     const object = calculation.object;
@@ -62,21 +80,20 @@ export const CalculatorResult: FC<CalculatorResultProps> = ({
         return translate("a_inMetersPerSecond", translate("pipeVelocity"));
       }
     }
-
-    return capitalizeFirstLetter(
-      translate("a_inMeters", calculation.result.toString()),
-    ) as string;
+    return object + " " + type;
   };
 
   return (
     <View style={containerStyle}>
       <Text style={descriptionStyle}>
-        {resultDescriptionFromCalulation(calculation)}
+        {capitalizeFirstLetter(resultDescriptionFromCalulation(calculation))}
       </Text>
-      <Text style={resultStyle}>
-        <Text>{calculation.result}</Text>
+      <View style={resultContainerStyle}>
+        <Text adjustsFontSizeToFit={true} numberOfLines={1} style={resultStyle}>
+          {calculation.result.toFixed(2)}
+        </Text>
         <Text style={unitStyle}>{" " + translate(calculation.resultUnit)}</Text>
-      </Text>
+      </View>
     </View>
   );
 };
