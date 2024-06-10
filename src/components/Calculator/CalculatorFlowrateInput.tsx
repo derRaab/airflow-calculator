@@ -1,4 +1,4 @@
-import { Calculation } from "@/src/calculation";
+import { Calculation, CalculationValue } from "@/src/calculation";
 import { translate } from "@/src/localization";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
@@ -10,7 +10,7 @@ interface CalculatorFlowrateInputProps {
   calculation: Calculation;
   layout: MaterialDesign3Layout;
   minHeight: number;
-  onFlowrateChange: (flowrate: number) => void;
+  onFlowrateChange: (flowrate: CalculationValue) => void;
 }
 
 export const CalculatorFlowrateInput: FC<CalculatorFlowrateInputProps> = ({
@@ -26,9 +26,16 @@ export const CalculatorFlowrateInput: FC<CalculatorFlowrateInputProps> = ({
     padding: layout.padding,
   };
 
-  const [flowrate, setFlowrate] = useState(calculation.flowrate);
+  const [flowrate, setFlowrate] = useState<CalculationValue>({
+    value: calculation.flowrate.value,
+    unit: calculation.flowrate.unit,
+  });
 
-  const onInputChange = (newFlowRate: number) => {
+  const onInputChange = (inputValue: number) => {
+    const newFlowRate: CalculationValue = {
+      value: inputValue,
+      unit: flowrate.unit,
+    };
     setFlowrate(newFlowRate);
     onFlowrateChange(newFlowRate);
   };

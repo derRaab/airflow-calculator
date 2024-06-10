@@ -1,22 +1,20 @@
 import {
   Calculation,
-  CalculationUnit,
+  CalculationValue,
   calculateDuctArea,
-  convertMm2ToM2,
+  convertToUnit,
 } from "@/src/calculation";
 import { translate } from "@/src/localization";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
-import { capitalizeFirstLetter } from "@/src/utils/stringutils";
 import React, { FC, useState } from "react";
 import { StyleProp, Text, View, ViewStyle } from "react-native";
 import { CalculatorTextInput } from "./CalculatorTextInput";
 
 export interface DuctArea {
-  area: number;
-  areaUnit: CalculationUnit;
-  height: number;
-  width: number;
+  area: CalculationValue;
+  height: CalculationValue;
+  width: CalculationValue;
 }
 
 interface CalculatorDuctAreaInputProps {
@@ -42,72 +40,49 @@ export const CalculatorDuctAreaInput: FC<CalculatorDuctAreaInputProps> = ({
   const areaStyle = { color: colorScheme.onSurface };
 
   const [area, setArea] = useState<DuctArea>({
-    area: calculation.area,
-    areaUnit: calculation.areaUnit,
-    height: calculation.height,
-    width: calculation.width,
+    area: { value: calculation.area.value, unit: calculation.area.unit },
+    height: { value: calculation.height.value, unit: calculation.height.unit },
+    width: { value: calculation.width.value, unit: calculation.width.unit },
   });
 
   const onWidthChange = (width: number) => {
+    const newWidth: CalculationValue = { value: width, unit: widthUnit };
     const newArea: DuctArea = {
-      area: calculateDuctArea(width, area.height),
-      areaUnit: "mm2",
+      area: calculateDuctArea(newWidth, area.height),
       height: area.height,
-      width,
+      width: newWidth,
     };
     setArea(newArea);
     onAreaChange(newArea);
   };
 
   const onHeightChange = (height: number) => {
+    const newHeight: CalculationValue = { value: height, unit: heightUnit };
     const newArea: DuctArea = {
-      area: calculateDuctArea(area.width, height),
-      areaUnit: "mm2",
-      height,
+      area: calculateDuctArea(area.width, newHeight),
+      height: newHeight,
       width: area.width,
     };
     setArea(newArea);
     onAreaChange(newArea);
   };
 
-  const resultDescriptionFromCalulation = (calculation: Calculation) => {
-    const object = calculation.object;
-    const type = calculation.type;
-
-    if (object === "duct") {
-      if (type === "flowrate") {
-        return translate("a_inMetersPerSecond", translate("ductFlowrate"));
-      }
-      if (type === "velocity") {
-        return translate("a_inMetersPerSecond", translate("ductVelocity"));
-      }
-    }
-
-    if (object === "pipe") {
-      if (type === "flowrate") {
-        return translate("a_inMetersPerSecond", translate("pipeFlowrate"));
-      }
-      if (type === "velocity") {
-        return translate("a_inMetersPerSecond", translate("pipeVelocity"));
-      }
-    }
-
-    return capitalizeFirstLetter(
-      translate("a_inMeters", calculation.result.toString()),
-    ) as string;
-  };
-
-  const areaM2 = area.areaUnit === "m2" ? area.area : convertMm2ToM2(area.area);
+  const areaM2 = convertToUnit(area.area, "m2");
   const areaText =
-    translate("a_inSquareMeters", translate("area")) + ": " + areaM2 + " m²";
+    translate("a_inSquareMeters", translate("area")) +
+    ": " +
+    areaM2.value +
+    " m²";
 
+  const widthUnit = "mm";
   const widthDescription = translate("a_inMillimeters", translate("width"));
   const widthPlaceholder = translate("width");
-  const widthUnit = translate("mm");
+  const widthUnitText = translate(widthUnit);
 
+  const heightUnit = "mm";
   const heightDescription = translate("a_inMillimeters", translate("height"));
   const heightPlaceholder = translate("height");
-  const heightUnit = translate("mm");
+  const heightUnitText = translate(heightUnit);
 
   return (
     <View style={containerStyle}>
@@ -118,8 +93,8 @@ export const CalculatorDuctAreaInput: FC<CalculatorDuctAreaInputProps> = ({
         minHeight={0}
         onChangeNumber={onWidthChange}
         placeholder={widthPlaceholder}
-        unit={widthUnit}
-        value={area.width}
+        unit={widthUnitText}
+        value={area.width.value}
       />
       <CalculatorTextInput
         layout={layout}
@@ -127,8 +102,8 @@ export const CalculatorDuctAreaInput: FC<CalculatorDuctAreaInputProps> = ({
         minHeight={0}
         onChangeNumber={onHeightChange}
         placeholder={heightPlaceholder}
-        unit={heightUnit}
-        value={area.height}
+        unit={heightUnitText}
+        value={area.height.value}
       />
     </View>
   );

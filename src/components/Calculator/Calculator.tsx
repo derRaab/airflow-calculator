@@ -1,4 +1,4 @@
-import { Calculation } from "@/src/calculation";
+import { Calculation, CalculationValue } from "@/src/calculation";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
 import React, { FC } from "react";
@@ -63,7 +63,7 @@ export const Calculator: FC<CalculatorProps> = ({
     onInputChange(newCalculation);
   };
 
-  const onFlowrateChange = (flowrate: number) => {
+  const onFlowrateChange = (flowrate: CalculationValue) => {
     const newCalculation: Calculation = {
       ...calculation,
       flowrate,
@@ -71,7 +71,7 @@ export const Calculator: FC<CalculatorProps> = ({
     onInputChange(newCalculation);
   };
 
-  const onVelocityChange = (velocity: number) => {
+  const onVelocityChange = (velocity: CalculationValue) => {
     const newCalculation: Calculation = {
       ...calculation,
       velocity,

@@ -1,4 +1,4 @@
-import { Calculation } from "@/src/calculation";
+import { Calculation, CalculationValue } from "@/src/calculation";
 import { translate } from "@/src/localization";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
@@ -10,7 +10,7 @@ interface CalculatorVelocityInputProps {
   calculation: Calculation;
   layout: MaterialDesign3Layout;
   minHeight: number;
-  onVelocityChange: (velocity: number) => void;
+  onVelocityChange: (velocity: CalculationValue) => void;
 }
 
 export const CalculatorVelocityInput: FC<CalculatorVelocityInputProps> = ({
@@ -26,11 +26,18 @@ export const CalculatorVelocityInput: FC<CalculatorVelocityInputProps> = ({
     padding: layout.padding,
   };
 
-  const [velocity, setVelocity] = useState(calculation.velocity);
+  const [velocity, setVelocity] = useState<CalculationValue>({
+    value: calculation.velocity.value,
+    unit: calculation.velocity.unit,
+  });
 
-  const onInputChange = (newFlowRate: number) => {
-    setVelocity(newFlowRate);
-    onVelocityChange(newFlowRate);
+  const onInputChange = (inputValue: number) => {
+    const newVelocity: CalculationValue = {
+      value: inputValue,
+      unit: velocity.unit,
+    };
+    setVelocity(newVelocity);
+    onVelocityChange(newVelocity);
   };
 
   const description = translate("a_inMetersPerSecond", translate("velocity"));
@@ -46,7 +53,7 @@ export const CalculatorVelocityInput: FC<CalculatorVelocityInputProps> = ({
         onChangeNumber={onInputChange}
         placeholder={placeholder}
         unit={unit}
-        value={velocity}
+        value={velocity.value}
       />
     </View>
   );

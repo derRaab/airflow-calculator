@@ -1,8 +1,8 @@
 import {
   Calculation,
-  CalculationUnit,
+  CalculationValue,
   calculatePipeArea,
-  convertMm2ToM2,
+  convertToUnit,
 } from "@/src/calculation";
 import { translate } from "@/src/localization";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
@@ -12,9 +12,8 @@ import { StyleProp, Text, View, ViewStyle } from "react-native";
 import { CalculatorTextInput } from "./CalculatorTextInput";
 
 export interface PipeArea {
-  area: number;
-  areaUnit: CalculationUnit;
-  diameter: number;
+  area: CalculationValue;
+  diameter: CalculationValue;
 }
 
 interface CalculatorPipeAreaInputProps {
@@ -39,31 +38,40 @@ export const CalculatorPipeAreaInput: FC<CalculatorPipeAreaInputProps> = ({
   const areaStyle = { color: colorScheme.onSurface };
 
   const [area, setArea] = useState<PipeArea>({
-    area: calculation.area,
-    areaUnit: calculation.areaUnit,
-    diameter: calculation.diameter,
+    area: { value: calculation.area.value, unit: calculation.area.unit },
+    diameter: {
+      value: calculation.diameter.value,
+      unit: calculation.diameter.unit,
+    },
   });
 
   const onDiameterChange = (diameter: number) => {
+    const newDiameter: CalculationValue = {
+      value: diameter,
+      unit: diameterUnit,
+    };
     const newArea = {
-      area: calculatePipeArea(diameter),
-      areaUnit: area.areaUnit,
-      diameter,
+      area: calculatePipeArea(newDiameter),
+      diameter: newDiameter,
     };
     setArea(newArea);
     onAreaChange(newArea);
   };
 
-  const areaM2 = area.areaUnit === "m2" ? area.area : convertMm2ToM2(area.area);
+  const areaM2 = convertToUnit(area.area, "m2");
   const areaText =
-    translate("a_inSquareMeters", translate("area")) + ": " + areaM2 + " m²";
+    translate("a_inSquareMeters", translate("area")) +
+    ": " +
+    areaM2.value +
+    " m²";
 
+  const diameterUnit = "mm";
   const diameterDescription = translate(
     "a_inMillimeters",
     translate("diameter"),
   );
   const diameterPlaceholder = translate("diameter");
-  const diameterUnit = translate("mm");
+  const diameterUnitText = translate(diameterUnit);
 
   return (
     <View style={containerStyle}>
@@ -74,8 +82,8 @@ export const CalculatorPipeAreaInput: FC<CalculatorPipeAreaInputProps> = ({
         minHeight={0}
         onChangeNumber={onDiameterChange}
         placeholder={diameterPlaceholder}
-        unit={diameterUnit}
-        value={area.diameter}
+        unit={diameterUnitText}
+        value={area.diameter.value}
       />
     </View>
   );
