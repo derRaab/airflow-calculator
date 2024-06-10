@@ -1,4 +1,8 @@
-import { Calculation, calculateDuctVelocity } from "@/src/calculation";
+import {
+  Calculation,
+  calculateDuctVelocity,
+  defaultCalculation,
+} from "@/src/calculation";
 import { Calculator } from "@/src/components/Calculator/Calculator";
 import { usePreferredLayout } from "@/src/themes/hooks";
 import { useHeaderHeight } from "@react-navigation/elements";
@@ -22,20 +26,10 @@ export default function Index() {
 
   // Calculation state
   const [calculation, setCalculation] = useState<Calculation>({
-    area: 0,
-    areaUnit: "m2",
-    diameter: 0,
-    diameterUnit: "mm",
-    flowrate: 0,
-    flowrateUnit: "m3_h",
-    height: 0,
-    heightUnit: "mm",
+    ...defaultCalculation,
+
     object: "duct",
-    result: 0,
-    resultUnit: "m_s",
     type: "velocity",
-    width: 0,
-    widthUnit: "mm",
   });
 
   // Handle calculator input change
