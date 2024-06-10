@@ -80,6 +80,7 @@ export const CalculatorTextInput: FC<CalculatorTextInputProps> = ({
           keyboardType="numeric"
           onChangeText={onChangeText}
           placeholder={placeholder}
+          placeholderTextColor={colorScheme.onSurface + "66"}
           style={textInputStyle}
           value={displayValue}
         ></TextInput>
