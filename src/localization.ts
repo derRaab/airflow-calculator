@@ -82,7 +82,7 @@ const translations: Translations = {
     cm: "cm",
     diameter: "Diameter",
     dm: "dm",
-    duct: "duct",
+    duct: "Duct",
     ductFlowrate: "duct flow rate",
     ductVelocity: "duct velocity",
     flowrate: "Flow rate",
