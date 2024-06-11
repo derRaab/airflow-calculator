@@ -46,7 +46,39 @@ describe("calculation", () => {
   });
 
   it("duct flow rate", () => {
-    expect(calculateDuctFlowrate()).toBe(1.1);
+    const calculationIn: Calculation = {
+      area: { value: 0, unit: "m2" },
+      diameter: { value: 0, unit: "mm" },
+      flowrate: { value: 0, unit: "m3_h" },
+      height: { value: 1_000, unit: "mm" },
+      object: "duct",
+      result: { value: 0, unit: "m_s" },
+      type: "flowrate",
+      width: { value: 1_000, unit: "mm" },
+      velocity: { value: 10, unit: "m_s" },
+    };
+    const calculationOut: Calculation = calculateDuctFlowrate(calculationIn);
+
+    // Expect unchanged values
+    expect(calculationOut.diameter.value).toBe(calculationIn.diameter.value);
+    expect(calculationOut.diameter.unit).toBe(calculationIn.diameter.unit);
+    expect(calculationOut.flowrate.value).toBe(calculationIn.flowrate.value);
+    expect(calculationOut.flowrate.unit).toBe(calculationIn.flowrate.unit);
+    expect(calculationOut.height.value).toBe(calculationIn.height.value);
+    expect(calculationOut.height.unit).toBe(calculationIn.height.unit);
+    expect(calculationOut.object).toBe(calculationIn.object);
+    expect(calculationOut.type).toBe(calculationIn.type);
+    expect(calculationOut.width.value).toBe(calculationIn.width.value);
+    expect(calculationOut.width.unit).toBe(calculationIn.width.unit);
+    expect(calculationOut.velocity.value).toBe(calculationIn.velocity.value);
+    expect(calculationOut.velocity.unit).toBe(calculationIn.velocity.unit);
+
+    // Expect calculated values
+    expect(calculationOut.area.value).toBe(1);
+    expect(calculationOut.area.unit).toBe("m2");
+
+    expect(calculationOut.result.value.toFixed(6)).toBe("36000.000000");
+    expect(calculationOut.result.unit).toBe("m3_h");
   });
 
   it("calculate duct velocity", () => {

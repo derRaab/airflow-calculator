@@ -40,8 +40,32 @@ export const defaultCalculation: Calculation = {
   velocity: { value: 0, unit: "m_s" },
 };
 
-export const calculateDuctFlowrate = () => {
-  return 1.1;
+export const calculateDuctFlowrate = (calculation: Calculation) => {
+  const newCalculation = { ...calculation };
+
+  // Calculate area (mm * mm = mm2 -> m2)
+  newCalculation.area = convertToUnit(
+    calculateDuctArea(newCalculation.width, newCalculation.height),
+    "m2",
+  );
+
+  // Calculate flowrate (m3/h)
+  const velocityMs = convertToUnit(newCalculation.velocity, "m_s");
+  newCalculation.result = {
+    value: velocityMs.value * newCalculation.area.value * 3600,
+    unit: "m3_h",
+  };
+
+  /*resultDuctVolumeFlow =
+    floatToValidFixed2String(DuctVolumeVO.velocityDuctVolumeFlow) *
+    (DuctVolumeVO.heightDuctVolumeFlow / 1000) *
+    (DuctVolumeVO.widthDuctVolumeFlow / 1000) *
+    3600;*/
+
+  // DuctVolumeVO.resultDuctVolumeFlow = floatToValidFixed2String( DuctVolumeVO.velocityDuctVolumeFlow ) * (( DuctVolumeVO.heightDuctVolumeFlow/1000 ) * ( DuctVolumeVO.widthDuctVolumeFlow/1000) ) * 3600;
+  // DuctVolumeVO.areaDuctVolumeFlow   = ( DuctVolumeVO.heightDuctVolumeFlow/ 1000) * (DuctVolumeVO.widthDuctVolumeFlow/ 1000 );
+
+  return newCalculation;
 };
 
 export const calculateDuctVelocity = (calculation: Calculation) => {
@@ -53,7 +77,7 @@ export const calculateDuctVelocity = (calculation: Calculation) => {
     "m2",
   );
 
-  // Calculate flowrate (m3/h)
+  // Calculate velocity (m/s)
   const flowrateM3H = convertToUnit(newCalculation.flowrate, "m3_h");
   newCalculation.result = {
     value: flowrateM3H.value / newCalculation.area.value / 3600,
@@ -80,7 +104,7 @@ export const calculatePipeVelocity = (calculation: Calculation) => {
     "m2",
   );
 
-  // Calculate flowrate (m3/h)
+  // Calculate velocity (m/s)
   const flowrateM3H = convertToUnit(newCalculation.flowrate, "m3_h");
   newCalculation.result = {
     value: flowrateM3H.value / newCalculation.area.value / 3600,
