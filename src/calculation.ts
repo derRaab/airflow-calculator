@@ -91,8 +91,26 @@ export const calculateDuctVelocity = (calculation: Calculation) => {
   return newCalculation;
 };
 
-export const calculatePipeFlowrate = () => {
-  return 3.3;
+export const calculatePipeFlowrate = (calculation: Calculation) => {
+  const newCalculation = { ...calculation };
+
+  // Calculate and convert area mm2 -> m2
+  newCalculation.area = convertToUnit(
+    calculatePipeArea(newCalculation.diameter),
+    "m2",
+  );
+
+  // Calculate flowrate (m3/h)
+  const velocityMs = convertToUnit(newCalculation.velocity, "m_s");
+  newCalculation.result = {
+    value: velocityMs.value * newCalculation.area.value * 3600,
+    unit: "m3_h",
+  };
+
+  // pipeVelocityVo.areaPipeVelocity   = Math.pow(( ( pipeVelocityVo.diameterPipeVelocity/1000 ) / 2), 2 ) * Math.PI;
+  // pipeVelocityVo.resultPipeVeolcity = pipeVelocityVo.volumeflowPipeVelocity / pipeVelocityVo.areaPipeVelocity / 3600 ;
+
+  return newCalculation;
 };
 
 export const calculatePipeVelocity = (calculation: Calculation) => {
