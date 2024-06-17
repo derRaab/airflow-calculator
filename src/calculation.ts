@@ -11,6 +11,9 @@ export interface CalculationUnits {
 
 export type CalculationUnit = keyof CalculationUnits;
 
+export type CalculationObject = "duct" | "pipe";
+export type CalculationType = "velocity" | "flowrate";
+
 export interface CalculationValue {
   value: number;
   unit: CalculationUnit;
@@ -21,9 +24,9 @@ export interface Calculation {
   diameter: CalculationValue;
   flowrate: CalculationValue;
   height: CalculationValue;
-  object: string;
+  object: CalculationObject;
   result: CalculationValue;
-  type: string;
+  type: CalculationType;
   velocity: CalculationValue;
   width: CalculationValue;
 }
