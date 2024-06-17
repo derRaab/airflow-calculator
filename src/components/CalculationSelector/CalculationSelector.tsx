@@ -1,12 +1,12 @@
 import { translate } from "@/src/localization";
-import { symbol } from "@/src/symbol";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
 import { typography } from "@/src/themes/typography";
-import { Link } from "expo-router";
 import React, { FC } from "react";
-import { Text, View, ViewStyle } from "react-native";
+import { View, ViewStyle } from "react-native";
 import { EdgeInsets } from "react-native-safe-area-context";
+import { ThreeObject } from "../Three/ThreeObject";
+import { CalculationSelectorButton } from "./CalculationSelectorButton";
 
 interface CalculationSelectorProps {
   insets: EdgeInsets;
@@ -34,20 +34,36 @@ export const CalculationSelector: FC<CalculationSelectorProps> = ({
 
   const objectTitle = translate(object);
   const objectTitleTextStyle = {
-    ...typography.displayLarge,
+    ...typography.labelMedium,
 
     color: colorScheme.onSurface,
   };
 
+  const threeObjectContainerStyle: ViewStyle = {
+    maxHeight: "50%",
+  };
+
+  const buttonContainerStyle: ViewStyle = {
+    gap: layout.gap * 2,
+  };
+
   return (
     <View style={surfaceStyle}>
-      <Text style={objectTitleTextStyle}>{objectTitle}</Text>
-      <Link href={"./(root)/" + object + "/flowrate"}>
-        {symbol("flowrate") + " " + translate("flowrate")}
-      </Link>
-      <Link href={"./(root)/" + object + "/velocity"}>
-        {symbol("velocity") + " " + translate("velocity")}
-      </Link>
+      <View style={threeObjectContainerStyle}>
+        <ThreeObject colorScheme={colorScheme} object={object} />
+      </View>
+      <View style={buttonContainerStyle}>
+        <CalculationSelectorButton
+          object={object}
+          type={"flowrate"}
+          layout={layout}
+        />
+        <CalculationSelectorButton
+          object={object}
+          type={"velocity"}
+          layout={layout}
+        />
+      </View>
     </View>
   );
 };
