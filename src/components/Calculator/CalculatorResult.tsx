@@ -90,7 +90,10 @@ export const CalculatorResult: FC<CalculatorResultProps> = ({
       </Text>
       <View style={resultContainerStyle}>
         <Text adjustsFontSizeToFit={true} numberOfLines={1} style={resultStyle}>
-          {calculation.result.value.toFixed(2)}
+          {calculation.result.value.toLocaleString(undefined, {
+            maximumFractionDigits: 2,
+            minimumFractionDigits: 2,
+          })}
         </Text>
         <Text style={unitStyle}>
           {" " + translate(calculation.result.unit)}
