@@ -27,7 +27,7 @@ interface MaterialDesign3ColorSchemes {
   darkHighContrast: MaterialDesign3ColorScheme;
 }
 
-interface MaterialDesign3ColorScheme {
+export interface MaterialDesign3ColorScheme {
   primary: string;
   surfaceTint: string;
   onPrimary: string;
@@ -108,6 +108,28 @@ interface MaterialDesign3ColorPalette {
   "100": string;
 }
 
+export type MaterialDesign3ColorPaletteKey = keyof MaterialDesign3ColorPalette;
+const materialDesign3ColorPaletteKeysOrder: MaterialDesign3ColorPaletteKey[] = [
+  "0",
+  "5",
+  "10",
+  "15",
+  "20",
+  "25",
+  "30",
+  "35",
+  "40",
+  "50",
+  "60",
+  "70",
+  "80",
+  "90",
+  "95",
+  "98",
+  "99",
+  "100",
+];
+
 type MaterialDesign3ColorSchemeName = keyof MaterialDesign3ColorSchemes;
 
 const isColorSchemeName = (
@@ -143,4 +165,39 @@ export const selectColorScheme = (
   }
   // Fallback light
   return colorSchemes.light;
+};
+
+export const selectPaletteColor = (
+  colorPalette: MaterialDesign3ColorPalette,
+  key: MaterialDesign3ColorPaletteKey,
+): string => {
+  return colorPalette[key];
+};
+
+export const selectPaletteColorAt = (
+  colorPalette: MaterialDesign3ColorPalette,
+  index:
+    | 0
+    | 1
+    | 2
+    | 3
+    | 4
+    | 5
+    | 6
+    | 7
+    | 8
+    | 9
+    | 10
+    | 11
+    | 12
+    | 13
+    | 14
+    | 15
+    | 16
+    | 17,
+): string => {
+  return selectPaletteColor(
+    colorPalette,
+    materialDesign3ColorPaletteKeysOrder[index],
+  );
 };
