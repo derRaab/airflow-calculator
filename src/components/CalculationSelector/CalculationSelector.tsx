@@ -1,7 +1,5 @@
-import { translate } from "@/src/localization";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
-import { typography } from "@/src/themes/typography";
 import React, { FC } from "react";
 import { View, ViewStyle } from "react-native";
 import { EdgeInsets } from "react-native-safe-area-context";
@@ -30,13 +28,6 @@ export const CalculationSelector: FC<CalculationSelectorProps> = ({
     paddingLeft: insets.left,
     paddingRight: insets.right,
     paddingBottom: insets.bottom,
-  };
-
-  const objectTitle = translate(object);
-  const objectTitleTextStyle = {
-    ...typography.labelMedium,
-
-    color: colorScheme.onSurface,
   };
 
   const threeObjectContainerStyle: ViewStyle = {
