@@ -6,14 +6,15 @@ import { Canvas } from "@react-three/fiber";
 import { DeviceMotion, DeviceMotionMeasurement } from "expo-sensors";
 import { Subscription } from "expo-sensors/build/Pedometer";
 import { THREE } from "expo-three";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { Curve, Vector3 } from "three";
 
 // Object size in general
 const objectWidth = 1;
 const objectHeight = 1;
 const objectDepth = 2;
-const objectPosition = [0.15, 0.15, 0];
+const objectPosition = new THREE.Vector3(0.15, 0.15, 0);
 
 // Duct size
 const ductWidth = objectWidth;
@@ -21,17 +22,27 @@ const ductWidthHalf = ductWidth / 2;
 const ductHeight = objectHeight;
 const ductHeightHalf = ductHeight / 2;
 // Duct plane geometries
-const ductWidthPlaneGeometryArgs = [ductWidth, objectDepth, 1, 1];
-const ductHeightPlaneGeometryArgs = [ductHeight, objectDepth, 1, 1];
+const ductWidthPlaneGeometryArgs: [
+  width?: number | undefined,
+  height?: number | undefined,
+  widthSegments?: number | undefined,
+  heightSegments?: number | undefined,
+] = [ductWidth, objectDepth, 1, 1];
+const ductHeightPlaneGeometryArgs: [
+  width?: number | undefined,
+  height?: number | undefined,
+  widthSegments?: number | undefined,
+  heightSegments?: number | undefined,
+] = [ductHeight, objectDepth, 1, 1];
 // Duct plane rotations
 const radian90 = THREE.MathUtils.degToRad(90);
 const ductWidthPlaneRotation = new THREE.Euler(radian90, 0, 0);
 const ductHeightPlaneRotation = new THREE.Euler(radian90, radian90, 0);
 // Duct plane positions
-const ductTopPlanePosition = [0, ductHeightHalf, 0];
-const ductLeftPlanePosition = [-ductWidthHalf, 0, 0];
-const ductRightPlanePosition = [ductWidthHalf, 0, 0];
-const ductBottomPlanePosition = [0, -ductHeightHalf, 0];
+const ductTopPlanePosition = new THREE.Vector3(0, ductHeightHalf, 0);
+const ductLeftPlanePosition = new THREE.Vector3(-ductWidthHalf, 0, 0);
+const ductRightPlanePosition = new THREE.Vector3(ductWidthHalf, 0, 0);
+const ductBottomPlanePosition = new THREE.Vector3(0, -ductHeightHalf, 0);
 
 // Pipe size
 const objectDepthHalf = objectDepth / 2;
@@ -42,13 +53,19 @@ const pipeCurveVertices = [
   new THREE.Vector3(0, 0, -objectDepthHalf * 3),
 ];
 const pipeCurve = new THREE.CatmullRomCurve3(pipeCurveVertices);
-const pipeGeometryArgs = [pipeCurve, 2, pipeRadius, 64, true];
+const pipeGeometryArgs: [
+  path?: Curve<Vector3> | undefined,
+  tubularSegments?: number | undefined,
+  radius?: number | undefined,
+  radialSegments?: number | undefined,
+  closed?: boolean | undefined,
+] = [pipeCurve, 2, pipeRadius, 64, true];
 
 // Scene setup
 const aspectRatio = 4 / 3;
 const pointLightIntensity = 2000;
-const pointLightPosition = [0, 0, 5];
-const cameraPosition = [0, 0, 4];
+const pointLightPosition = new THREE.Vector3(0, 0, 5);
+const cameraPosition = new THREE.Vector3(0, 0, 4);
 const camera = {
   fov: 60,
   near: 0.1,
@@ -117,13 +134,15 @@ export const ThreeObject: FC<ThreeObjectProps> = ({ colorScheme, object }) => {
   const showDuct = object === "duct" || object === "both";
   const showPipe = object === "pipe" || object === "both";
 
+  const pointLightRef = useRef<THREE.PointLight | null>(null);
+
   return (
     <View style={styles.canvasContainer}>
       <Canvas camera={camera}>
-        <ambientLight color={"#ff0000"} intensity={pointLightIntensity} />
         <pointLight
           position={pointLightPosition}
           intensity={pointLightIntensity}
+          ref={pointLightRef}
         />
 
         {showPipe && (
