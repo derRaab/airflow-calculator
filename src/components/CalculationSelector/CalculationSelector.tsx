@@ -6,6 +6,7 @@ import { EdgeInsets } from "react-native-safe-area-context";
 import { ThreeObject } from "../Three/ThreeObject";
 import { CalculationSelectorButton } from "./CalculationSelectorButton";
 
+import * as Device from "expo-device";
 interface CalculationSelectorProps {
   insets: EdgeInsets;
   layout: MaterialDesign3Layout;
@@ -41,7 +42,9 @@ export const CalculationSelector: FC<CalculationSelectorProps> = ({
   return (
     <View style={surfaceStyle}>
       <View style={threeObjectContainerStyle}>
-        <ThreeObject colorScheme={colorScheme} object={object} />
+        {Device.isDevice && (
+          <ThreeObject colorScheme={colorScheme} object={object} />
+        )}
       </View>
       <View style={buttonContainerStyle}>
         <CalculationSelectorButton
