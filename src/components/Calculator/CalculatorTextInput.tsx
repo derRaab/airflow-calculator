@@ -48,8 +48,12 @@ export const CalculatorTextInput: FC<CalculatorTextInputProps> = ({
     ...typography.labelLarge,
     color: colorScheme.onSurface,
   };
-  const stringToValue = (text: string) => {
-    const value = parseFloat(text);
+  const stringToValue = (valueString: string) => {
+    const decimalSeparator = (1.1).toLocaleString().charAt(1);
+    if (decimalSeparator === ",") {
+      valueString = valueString.replace(",", ".");
+    }
+    const value = parseFloat(valueString);
     if (isNaN(value)) {
       return 0;
     }
@@ -57,15 +61,36 @@ export const CalculatorTextInput: FC<CalculatorTextInputProps> = ({
   };
   const valueToString = (value: number) => {
     if (0 < value) {
-      return value.toString();
+      return value.toLocaleString();
     }
     return "";
   };
   const [displayValue, setDisplayValue] = useState(valueToString(value));
+
   const onChangeText = (text: string) => {
-    const value = stringToValue(text);
-    const string = valueToString(value);
-    setDisplayValue(string);
+    // Allow only digits and decimal separator
+    text = text.replace(/[^0-9.,]/g, "");
+    // Detect the localized decimal separator
+    const decimalSeparator = (1.1).toLocaleString().charAt(1);
+    // Rdfgsdfg
+    text = text.replace(decimalSeparator === "," ? "." : ",", "");
+    // Extract integer and fraction parts
+    const valuePartStrings = text.split(decimalSeparator);
+    let integerString = valuePartStrings[0] || "";
+    let fractionString = valuePartStrings[1] || "";
+    // Allow only one leading zero for the integer part
+    while (integerString.startsWith("00")) {
+      integerString = integerString.substring(1);
+    }
+    // Create the validated text
+    let valueString = integerString;
+    if (1 < valuePartStrings.length) {
+      valueString += decimalSeparator + fractionString;
+    }
+    // Get value from validated text
+    const value = stringToValue(valueString);
+
+    setDisplayValue(valueString);
     onChangeNumber(value);
   };
 
