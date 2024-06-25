@@ -33,6 +33,7 @@ export const CalculatorPipeAreaInput: FC<CalculatorPipeAreaInputProps> = ({
   const colorScheme = usePreferredColorScheme();
   const containerStyle: StyleProp<ViewStyle> = {
     backgroundColor: colorScheme.surfaceContainer,
+    gap: layout.gap,
     minHeight,
     padding: layout.padding,
   };
