@@ -9,7 +9,7 @@ import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
 import { typography } from "@/src/themes/typography";
 import React, { FC, useState } from "react";
-import { StyleProp, Text, View, ViewStyle } from "react-native";
+import { StyleProp, Text, TextStyle, View, ViewStyle } from "react-native";
 import { CalculatorTextInput } from "./CalculatorTextInput";
 
 export interface DuctArea {
@@ -38,7 +38,7 @@ export const CalculatorDuctAreaInput: FC<CalculatorDuctAreaInputProps> = ({
     minHeight,
     padding: layout.padding,
   };
-  const areaTextStyle = {
+  const areaTextStyle: TextStyle = {
     ...typography.labelLarge,
     color: colorScheme.onSurface,
     textAlign: "center",
