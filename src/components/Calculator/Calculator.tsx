@@ -39,9 +39,17 @@ export const Calculator: FC<CalculatorProps> = ({
 
   const colorScheme = usePreferredColorScheme();
   const surfaceStyle = {
+    flexGrow: 1,
+  };
+
+  const scrollViewStyle = {
+    padding: layout.padding,
+    gap: layout.gap,
+  };
+
+  const keyboardAvoidingViewStyle = {
     backgroundColor: colorScheme.surface,
     flexGrow: 1,
-    rowGap: layout.gap,
   };
 
   const onDuctAreaChange = (area: DuctArea) => {
@@ -87,8 +95,8 @@ export const Calculator: FC<CalculatorProps> = ({
         layout={layout}
         minHeight={resultMinHeight}
       />
-      <KeyboardAvoidingView behavior="height">
-        <ScrollView>
+      <KeyboardAvoidingView behavior="height" style={keyboardAvoidingViewStyle}>
+        <ScrollView contentContainerStyle={scrollViewStyle}>
           {calculation.object === "duct" && (
             <CalculatorDuctAreaInput
               calculation={calculation}

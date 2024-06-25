@@ -7,6 +7,7 @@ import {
 import { translate } from "@/src/localization";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
+import { typography } from "@/src/themes/typography";
 import React, { FC, useState } from "react";
 import { StyleProp, Text, View, ViewStyle } from "react-native";
 import { CalculatorTextInput } from "./CalculatorTextInput";
@@ -35,7 +36,11 @@ export const CalculatorPipeAreaInput: FC<CalculatorPipeAreaInputProps> = ({
     minHeight,
     padding: layout.padding,
   };
-  const areaStyle = { color: colorScheme.onSurface };
+  const areaTextStyle = {
+    ...typography.labelLarge,
+    color: colorScheme.onSurface,
+    textAlign: "center",
+  };
 
   const [area, setArea] = useState<PipeArea>({
     area: { value: calculation.area.value, unit: calculation.area.unit },
@@ -75,7 +80,7 @@ export const CalculatorPipeAreaInput: FC<CalculatorPipeAreaInputProps> = ({
 
   return (
     <View style={containerStyle}>
-      <Text style={areaStyle}>{areaText}</Text>
+      <Text style={areaTextStyle}>{areaText}</Text>
       <CalculatorTextInput
         description={diameterDescription}
         layout={layout}
