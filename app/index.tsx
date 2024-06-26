@@ -3,8 +3,9 @@ import {
   usePreferredColorScheme,
   usePreferredLayout,
 } from "@/src/themes/hooks";
+import { typography } from "@/src/themes/typography";
 import { Link } from "expo-router";
-import { View } from "react-native";
+import { TextStyle, View, ViewStyle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Index() {
@@ -21,48 +22,95 @@ export default function Index() {
     top: 0,
   };
 
+  const infoTextStyle = typography.labelLarge;
+  const infoTextStyleLineHeight = infoTextStyle.lineHeight ?? 0;
+  const layoutSpacing = layout.spacing;
+  const layoutPadding = layout.padding;
+  const minimumTopPadding = Math.max(safeAreaInsets.top, layoutSpacing);
+  const minimumBottomPadding = Math.max(safeAreaInsets.bottom, layoutPadding);
+  const minimumBottomInfoHeight =
+    layoutPadding + infoTextStyleLineHeight + minimumBottomPadding;
+  const opticalVerticalPadding = Math.max(
+    minimumBottomInfoHeight,
+    minimumTopPadding,
+  );
+  const infoBottomPadding =
+    opticalVerticalPadding - layoutPadding - infoTextStyleLineHeight;
+
+  const containerStyle: ViewStyle = {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    backgroundColor: colorScheme.background,
+  };
+  const selectorsContainerStyle = {
+    flex: 1,
+    flexGrow: 1,
+    gap: layout.spacing,
+    paddingHorizontal: layout.spacing,
+    paddingTop: opticalVerticalPadding,
+  };
+  const selectorContainerStyle = {
+    flex: 1,
+  };
+  const infoContainerStyle: ViewStyle = {
+    flexBasis: "auto",
+  };
+
+  const infoContainerLinkTextStyle: TextStyle = {
+    ...infoTextStyle,
+
+    textAlign: "center",
+    color: colorScheme.onSurface,
+    paddingBottom: infoBottomPadding,
+    paddingTop: layoutPadding,
+  };
+
   return (
-    <View
-      style={{
-        flex: 1,
-        flexDirection: "column",
-        backgroundColor: colorScheme.surface,
-        gap: layout.gap,
-        paddingLeft: layout.padding,
-        paddingRight: layout.padding,
-        paddingTop: safeAreaInsets.top,
-        paddingBottom: safeAreaInsets.bottom,
-      }}
-    >
-      <View
-        style={{
-          flexShrink: 1,
-        }}
-      >
-        <CalculationSelector
-          insets={selectorInsets}
-          layout={layout}
-          object="duct"
-        />
+    <View style={containerStyle}>
+      <View style={selectorsContainerStyle}>
+        <View style={selectorContainerStyle}>
+          <CalculationSelector
+            insets={selectorInsets}
+            layout={layout}
+            object="duct"
+          />
+        </View>
+        <View style={selectorContainerStyle}>
+          <CalculationSelector
+            insets={selectorInsets}
+            layout={layout}
+            object="pipe"
+          />
+        </View>
       </View>
-      <View
-        style={{
-          flexShrink: 1,
-        }}
-      >
-        <CalculationSelector
-          insets={selectorInsets}
-          layout={layout}
-          object="pipe"
-        />
+      <View style={infoContainerStyle}>
+        <Link href="./(root)/info" style={infoContainerLinkTextStyle}>
+          Info
+        </Link>
       </View>
-      <View
-        style={{
-          height: 44,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+    </View>
+  );
+
+  return (
+    <View style={containerStyle}>
+      <View style={selectorsContainerStyle}>
+        <View style={selectorContainerStyle}>
+          <CalculationSelector
+            insets={selectorInsets}
+            layout={layout}
+            object="duct"
+          />
+        </View>
+        <View style={selectorContainerStyle}>
+          <CalculationSelector
+            insets={selectorInsets}
+            layout={layout}
+            object="pipe"
+          />
+        </View>
+      </View>
+      <View style={infoContainerStyle}>
         <Link href="./(root)/info" style={{ color: colorScheme.onSurface }}>
           Info
         </Link>

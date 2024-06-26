@@ -20,7 +20,7 @@ export const CalculationSelector: FC<CalculationSelectorProps> = ({
 }) => {
   const colorScheme = usePreferredColorScheme();
   const surfaceStyle: ViewStyle = {
-    backgroundColor: colorScheme.surface,
+    backgroundColor: colorScheme.surfaceContainer,
     flexGrow: 1,
     rowGap: layout.gap,
     alignItems: "center",
