@@ -23,40 +23,50 @@ export const CalculationSelectorButton: FC<CalculationSelectorButtonProps> = ({
   const labelTextStyle = {
     ...typography.headlineSmall,
 
-    color: colorScheme.onSurface,
+    color: colorScheme.onPrimary,
   };
 
   const symbolTextStyle = {
-    ...typography.headlineMedium,
+    ...typography.headlineSmall,
 
     color: colorScheme.onPrimary,
   };
 
-  const sympolSize = (symbolTextStyle.fontSize as number) * 2;
+  const sympolSize = (symbolTextStyle.fontSize as number) * 1.8;
   const symbolStyle: ViewStyle = {
+    paddingTop: 2,
     alignItems: "center",
-    backgroundColor: colorScheme.primary,
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderColor: colorScheme.onPrimary,
     borderRadius: object === "pipe" ? sympolSize / 2 : 0,
     height: sympolSize,
     justifyContent: "center",
     width: sympolSize,
   };
 
+  const linkStyle: ViewStyle = {};
+
+  const spacingHorizontal = layout.spacing;
   const linkInnerStyle: ViewStyle = {
     alignItems: "center",
     flexDirection: "row",
     flexShrink: 1,
-    gap: layout.gap * 2,
+    gap: spacingHorizontal,
+    backgroundColor: colorScheme.primary,
+    borderRadius: layout.spacing,
+    paddingHorizontal: spacingHorizontal,
+    paddingVertical: 16,
   };
 
   const objectTitle = translate(object);
   const objectTitleTextStyle = {
     ...typography.labelMedium,
 
-    color: colorScheme.onSurface,
+    color: colorScheme.onPrimary,
   };
   return (
-    <Link href={"./(root)/" + object + "/" + type}>
+    <Link href={"./(root)/" + object + "/" + type} style={linkStyle}>
       <View style={linkInnerStyle}>
         <View style={symbolStyle}>
           <Text style={symbolTextStyle}>{symbol(type)}</Text>

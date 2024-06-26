@@ -21,6 +21,7 @@ export const CalculationSelector: FC<CalculationSelectorProps> = ({
   const colorScheme = usePreferredColorScheme();
   const surfaceStyle: ViewStyle = {
     backgroundColor: colorScheme.surfaceContainer,
+    borderRadius: layout.spacing,
     flexGrow: 1,
     rowGap: layout.gap,
     alignItems: "center",
@@ -36,7 +37,7 @@ export const CalculationSelector: FC<CalculationSelectorProps> = ({
   };
 
   const buttonContainerStyle: ViewStyle = {
-    gap: layout.gap * 2,
+    gap: layout.gap,
   };
 
   return (
