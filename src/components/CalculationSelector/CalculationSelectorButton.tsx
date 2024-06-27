@@ -6,7 +6,7 @@ import { MaterialDesign3Layout } from "@/src/themes/layout";
 import { typography } from "@/src/themes/typography";
 import { Link } from "expo-router";
 import React, { FC } from "react";
-import { Text, View, ViewStyle } from "react-native";
+import { Pressable, Text, View, ViewStyle } from "react-native";
 interface CalculationSelectorButtonProps {
   layout: MaterialDesign3Layout;
   object: CalculationObject;
@@ -45,20 +45,24 @@ export const CalculationSelectorButton: FC<CalculationSelectorButtonProps> = ({
     width: sympolSize,
   };
 
-  const linkStyle: ViewStyle = {};
+  const linkStyle: ViewStyle = {
+    backgroundColor: colorScheme.primary,
+    borderRadius: 1000,
+  };
 
   const spacingHorizontal = layout.spacing;
   const linkInnerStyle: ViewStyle = {
     alignItems: "center",
     flexDirection: "row",
-    flexShrink: 1,
+    justifyContent: "flex-start",
     gap: spacingHorizontal,
-    backgroundColor: colorScheme.primary,
-    borderRadius: layout.spacing,
     paddingHorizontal: spacingHorizontal,
     paddingVertical: 16,
   };
 
+  const labelStyle: ViewStyle = {
+    flexGrow: 1,
+  };
   const objectTitle = translate(object);
   const objectTitleTextStyle = {
     ...typography.labelMedium,
@@ -66,16 +70,18 @@ export const CalculationSelectorButton: FC<CalculationSelectorButtonProps> = ({
     color: colorScheme.onPrimary,
   };
   return (
-    <Link href={"./(root)/" + object + "/" + type} style={linkStyle}>
-      <View style={linkInnerStyle}>
-        <View style={symbolStyle}>
-          <Text style={symbolTextStyle}>{symbol(type)}</Text>
+    <Link href={"./(root)/" + object + "/" + type} asChild>
+      <Pressable style={linkStyle}>
+        <View style={linkInnerStyle}>
+          <View style={symbolStyle}>
+            <Text style={symbolTextStyle}>{symbol(type)}</Text>
+          </View>
+          <View style={labelStyle}>
+            <Text style={labelTextStyle}>{translate(type)}</Text>
+            <Text style={objectTitleTextStyle}>{objectTitle}</Text>
+          </View>
         </View>
-        <View>
-          <Text style={labelTextStyle}>{translate(type)}</Text>
-          <Text style={objectTitleTextStyle}>{objectTitle}</Text>
-        </View>
-      </View>
+      </Pressable>
     </Link>
   );
 };

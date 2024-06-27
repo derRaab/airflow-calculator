@@ -21,7 +21,7 @@ export const CalculationSelector: FC<CalculationSelectorProps> = ({
   const colorScheme = usePreferredColorScheme();
   const surfaceStyle: ViewStyle = {
     backgroundColor: colorScheme.surfaceContainer,
-    borderRadius: layout.spacing,
+    borderRadius: layout.padding,
     flexGrow: 1,
     rowGap: layout.gap,
     alignItems: "center",
@@ -29,7 +29,7 @@ export const CalculationSelector: FC<CalculationSelectorProps> = ({
     paddingTop: insets.top,
     paddingLeft: insets.left,
     paddingRight: insets.right,
-    paddingBottom: insets.bottom,
+    paddingBottom: layout.spacing,
   };
 
   const threeObjectContainerStyle: ViewStyle = {
@@ -37,7 +37,7 @@ export const CalculationSelector: FC<CalculationSelectorProps> = ({
   };
 
   const buttonContainerStyle: ViewStyle = {
-    gap: layout.gap,
+    gap: layout.gap * 2,
   };
 
   return (
