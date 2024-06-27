@@ -2,7 +2,13 @@ import { Calculation, CalculationValue } from "@/src/calculation";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
 import React, { FC } from "react";
-import { KeyboardAvoidingView, ScrollView, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  ScrollView,
+  StatusBar,
+  View,
+  useColorScheme,
+} from "react-native";
 import { EdgeInsets } from "react-native-safe-area-context";
 import { CalculatorDuctAreaInput, DuctArea } from "./CalculatorDuctAreaInput";
 import { CalculatorFlowrateInput } from "./CalculatorFlowrateInput";
@@ -37,6 +43,7 @@ export const Calculator: FC<CalculatorProps> = ({
   };
   const resultMinHeight = insets.top * 2;
 
+  const colorSchemeName = useColorScheme();
   const colorScheme = usePreferredColorScheme();
   const surfaceStyle = {
     flexGrow: 1,
@@ -89,6 +96,10 @@ export const Calculator: FC<CalculatorProps> = ({
 
   return (
     <View style={surfaceStyle}>
+      <StatusBar
+        barStyle={colorSchemeName === "dark" ? "dark-content" : "light-content"}
+        backgroundColor="transparent"
+      />
       <CalculatorResult
         calculation={calculation}
         insets={resultInsets}

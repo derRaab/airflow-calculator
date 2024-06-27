@@ -1,3 +1,4 @@
+import { usePreferredColorScheme } from "@/src/themes/hooks";
 import {
   DarkTheme,
   DefaultTheme,
@@ -11,7 +12,8 @@ import { useColorScheme } from "react-native";
 global.THREE = global.THREE || THREE;
 
 export default function RootLayout() {
-  let colorSchemeName = useColorScheme();
+  const colorSchemeName = useColorScheme();
+  const colorScheme = usePreferredColorScheme();
 
   return (
     <ThemeProvider
@@ -24,6 +26,7 @@ export default function RootLayout() {
           headerShown: true,
           headerTitle: "",
           headerTransparent: true,
+          headerTintColor: colorScheme.onPrimary,
         }}
       >
         <Stack.Screen
