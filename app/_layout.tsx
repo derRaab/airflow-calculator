@@ -9,7 +9,7 @@ import { THREE } from "expo-three";
 import { useColorScheme } from "react-native";
 
 // This is needed to make THREE global
-global.THREE = global.THREE || THREE;
+(global as any).THREE = (global as any).THREE || THREE;
 
 export default function RootLayout() {
   const colorSchemeName = useColorScheme();
