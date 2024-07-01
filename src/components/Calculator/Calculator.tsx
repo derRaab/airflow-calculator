@@ -1,15 +1,18 @@
 import { Calculation, CalculationValue } from "@/src/calculation";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
+import * as Device from "expo-device";
 import React, { FC } from "react";
 import {
   KeyboardAvoidingView,
   ScrollView,
   StatusBar,
   View,
+  ViewStyle,
   useColorScheme,
 } from "react-native";
 import { EdgeInsets } from "react-native-safe-area-context";
+import { ThreeObject } from "../Three/ThreeObject";
 import { CalculatorDuctAreaInput, DuctArea } from "./CalculatorDuctAreaInput";
 import { CalculatorFlowrateInput } from "./CalculatorFlowrateInput";
 import { CalculatorPipeAreaInput, PipeArea } from "./CalculatorPipeAreaInput";
@@ -93,6 +96,10 @@ export const Calculator: FC<CalculatorProps> = ({
     };
     onInputChange(newCalculation);
   };
+  const threeObjectContainerStyle: ViewStyle = {
+    alignSelf: "center",
+    width: "20%",
+  };
 
   return (
     <View style={surfaceStyle}>
@@ -142,6 +149,14 @@ export const Calculator: FC<CalculatorProps> = ({
               onFlowrateChange={onFlowrateChange}
             />
           )}
+          <View style={threeObjectContainerStyle}>
+            {Device.isDevice && (
+              <ThreeObject
+                colorScheme={colorScheme}
+                object={calculation.object}
+              />
+            )}
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </View>
