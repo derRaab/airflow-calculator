@@ -33,7 +33,7 @@ export const CalculationSelector: FC<CalculationSelectorProps> = ({
   };
 
   const threeObjectContainerStyle: ViewStyle = {
-    maxHeight: "50%",
+    maxHeight: "30%",
   };
 
   const buttonContainerStyle: ViewStyle = {
