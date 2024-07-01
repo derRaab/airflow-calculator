@@ -6,7 +6,7 @@ import { Canvas } from "@react-three/fiber";
 import { DeviceMotion, DeviceMotionMeasurement } from "expo-sensors";
 import { Subscription } from "expo-sensors/build/Pedometer";
 import { THREE } from "expo-three";
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Curve, Vector3 } from "three";
 
@@ -61,23 +61,35 @@ const pipeGeometryArgs: [
   closed?: boolean | undefined,
 ] = [pipeCurve, 2, pipeRadius, 64, true];
 
+// Lighting
+const addAmbientLight = false;
+const ambientLightColor = "#ffffff";
+const ambientLightIntensity = 0.9;
+
+const addPointLight = true;
+const pointLightIntensity = 1;
+const pointLightColor = "#ffffff";
+const pointLightPosition = new THREE.Vector3(0, 2, 5);
+
+const addDirectionalLight = false;
+const directionalLightIntensity = 100;
+const directionalLightColor = "#ffffff";
+const directionalLightPosition = new THREE.Vector3(0, 20, 20);
+
 // Scene setup
-const aspectRatio = 4 / 3;
-const pointLightIntensity = 2000;
-const pointLightPosition = new THREE.Vector3(0, 0, 5);
-const cameraPosition = new THREE.Vector3(0, 0, 4);
+const aspectRatio = 1 / 1;
 const camera = {
   fov: 60,
   near: 0.1,
   far: 1000,
   zoom: 2.3,
-  position: cameraPosition,
+  position: new THREE.Vector3(0, 0, 5),
 };
 
 const styles = StyleSheet.create({
-  canvasContainer: { aspectRatio: aspectRatio },
+  canvasContainer: { aspectRatio: aspectRatio, opacity: 0.1 },
 });
-const rotationBase = { x: 15, y: -25, z: 0 };
+const rotationBase = { x: 15, y: -15, z: 0 };
 const xFactor = 2;
 const yFactor = 10;
 const zFactor = 10;
@@ -114,8 +126,8 @@ export const ThreeObject: FC<ThreeObjectProps> = ({ colorScheme, object }) => {
   };
 
   useEffect(() => {
-    DeviceMotion.setUpdateInterval(1000 / 12);
-    _subscribe();
+    //DeviceMotion.setUpdateInterval(1000 / 12);
+    //_subscribe();
     return () => _unsubscribe();
   }, []);
 
@@ -134,64 +146,94 @@ export const ThreeObject: FC<ThreeObjectProps> = ({ colorScheme, object }) => {
   const showDuct = object === "duct" || object === "both";
   const showPipe = object === "pipe" || object === "both";
 
-  const pointLightRef = useRef<THREE.PointLight | null>(null);
-
   return (
     <View style={styles.canvasContainer}>
       <Canvas camera={camera}>
-        <pointLight
-          position={pointLightPosition}
-          intensity={pointLightIntensity}
-          ref={pointLightRef}
-        />
+        {addAmbientLight && (
+          <ambientLight
+            color={ambientLightColor}
+            intensity={ambientLightIntensity}
+          />
+        )}
+        {addPointLight && (
+          <pointLight
+            color={pointLightColor}
+            position={pointLightPosition}
+            intensity={pointLightIntensity}
+            castShadow
+          />
+        )}
+        {addDirectionalLight && (
+          <directionalLight
+            color={directionalLightColor}
+            position={directionalLightPosition}
+            intensity={directionalLightIntensity}
+            castShadow
+          />
+        )}
 
         {showPipe && (
-          <mesh position={objectPosition} rotation={rotation}>
+          <mesh castShadow position={objectPosition} rotation={rotation}>
             <tubeGeometry args={pipeGeometryArgs} />
-            <meshMatcapMaterial color={materialColor} />
+            <meshStandardMaterial
+              color={materialColor}
+              shadowSide={THREE.DoubleSide}
+            />
           </mesh>
         )}
 
         {showDuct && (
           <group position={objectPosition} rotation={rotation}>
             <mesh
+              castShadow
               position={ductTopPlanePosition}
+              receiveShadow
               rotation={ductWidthPlaneRotation}
             >
               <planeGeometry args={ductWidthPlaneGeometryArgs} />
-              <meshMatcapMaterial
+              <meshStandardMaterial
                 color={materialColor}
                 side={THREE.DoubleSide}
+                shadowSide={THREE.DoubleSide}
               />
             </mesh>
             <mesh
+              castShadow
               position={ductLeftPlanePosition}
+              receiveShadow
               rotation={ductHeightPlaneRotation}
             >
               <planeGeometry args={ductHeightPlaneGeometryArgs} />
-              <meshMatcapMaterial
+              <meshStandardMaterial
                 color={materialColor}
                 side={THREE.DoubleSide}
+                shadowSide={THREE.DoubleSide}
               />
             </mesh>
             <mesh
+              castShadow
               position={ductRightPlanePosition}
+              receiveShadow
               rotation={ductHeightPlaneRotation}
             >
               <planeGeometry args={ductHeightPlaneGeometryArgs} />
-              <meshMatcapMaterial
+              <meshStandardMaterial
                 color={materialColor}
                 side={THREE.DoubleSide}
+                shadowSide={THREE.DoubleSide}
               />
             </mesh>
             <mesh
+              castShadow
               position={ductBottomPlanePosition}
+              receiveShadow
               rotation={ductWidthPlaneRotation}
             >
               <planeGeometry args={ductWidthPlaneGeometryArgs} />
-              <meshMatcapMaterial
+              <meshStandardMaterial
                 color={materialColor}
                 side={THREE.DoubleSide}
+                shadowSide={THREE.DoubleSide}
               />
             </mesh>
           </group>
