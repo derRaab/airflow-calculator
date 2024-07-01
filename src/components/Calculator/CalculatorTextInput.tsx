@@ -26,6 +26,7 @@ export const CalculatorTextInput: FC<CalculatorTextInputProps> = ({
 }) => {
   const colorScheme = usePreferredColorScheme();
   const containerStyle: StyleProp<ViewStyle> = {
+    backgroundColor: colorScheme.surfaceContainerHigh,
     minHeight,
     padding: layout.padding,
   };

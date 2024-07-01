@@ -55,7 +55,7 @@ export const Calculator: FC<CalculatorProps> = ({
   };
 
   const keyboardAvoidingViewStyle = {
-    backgroundColor: colorScheme.surface,
+    backgroundColor: colorScheme.background,
     flexGrow: 1,
   };
 
