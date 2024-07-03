@@ -5,6 +5,7 @@ import { lineHeightPadding } from "@/src/utils/textStyleUtils";
 import { FC, MutableRefObject, useState } from "react";
 import {
   NativeSyntheticEvent,
+  Pressable,
   StyleProp,
   Text,
   TextInput,
@@ -12,7 +13,6 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import { inputAccessoryViewID } from "./CalculatorInputAccessoryView";
 
 interface CalculatorTextInputProps {
   description: string;
@@ -111,7 +111,12 @@ export const CalculatorTextInput: FC<CalculatorTextInputProps> = ({
     lineHeightPadding(textInputStyle) - lineHeightPadding(unitStyle);
 
   return (
-    <View style={containerStyle}>
+    <Pressable
+      style={containerStyle}
+      onPress={() => {
+        textInputRef.current?.focus();
+      }}
+    >
       <Text style={descriptionStyle}>{description}</Text>
       <View style={inputContainerStyle}>
         <TextInput
@@ -122,7 +127,6 @@ export const CalculatorTextInput: FC<CalculatorTextInputProps> = ({
           placeholderTextColor={colorScheme.onSurface + "66"}
           style={textInputStyle}
           value={displayValue}
-          inputAccessoryViewID={inputAccessoryViewID}
           onFocus={(e) => {
             if (typeof onTextInputFocus === "function") {
               onTextInputFocus(e);
@@ -131,6 +135,6 @@ export const CalculatorTextInput: FC<CalculatorTextInputProps> = ({
         ></TextInput>
         <Text style={unitStyle}>{unit}</Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
