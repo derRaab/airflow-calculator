@@ -8,8 +8,17 @@ import { translate } from "@/src/localization";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
 import { typography } from "@/src/themes/typography";
-import React, { FC, useState } from "react";
-import { StyleProp, Text, TextStyle, View, ViewStyle } from "react-native";
+import React, { FC, MutableRefObject, useState } from "react";
+import {
+  NativeSyntheticEvent,
+  StyleProp,
+  Text,
+  TextInput,
+  TextInputFocusEventData,
+  TextStyle,
+  View,
+  ViewStyle,
+} from "react-native";
 import { CalculatorTextInput } from "./CalculatorTextInput";
 
 export interface DuctArea {
@@ -20,16 +29,22 @@ export interface DuctArea {
 
 interface CalculatorDuctAreaInputProps {
   calculation: Calculation;
+  heightTextInputRef: MutableRefObject<TextInput | undefined>;
   layout: MaterialDesign3Layout;
   minHeight: number;
   onAreaChange: (area: DuctArea) => void;
+  widthTextInputRef: MutableRefObject<TextInput | undefined>;
+  onTextInputFocus: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
 }
 
 export const CalculatorDuctAreaInput: FC<CalculatorDuctAreaInputProps> = ({
-  minHeight,
   calculation,
-  onAreaChange,
+  heightTextInputRef,
   layout,
+  minHeight,
+  onAreaChange,
+  widthTextInputRef,
+  onTextInputFocus,
 }) => {
   const colorScheme = usePreferredColorScheme();
   const containerStyle: StyleProp<ViewStyle> = {
@@ -98,17 +113,21 @@ export const CalculatorDuctAreaInput: FC<CalculatorDuctAreaInputProps> = ({
         minHeight={0}
         onChangeNumber={onWidthChange}
         placeholder={widthPlaceholder}
+        textInputRef={widthTextInputRef}
         unit={widthUnitText}
         value={area.width.value}
+        onTextInputFocus={onTextInputFocus}
       />
       <CalculatorTextInput
-        layout={layout}
         description={heightDescription}
+        layout={layout}
         minHeight={0}
         onChangeNumber={onHeightChange}
         placeholder={heightPlaceholder}
+        textInputRef={heightTextInputRef}
         unit={heightUnitText}
         value={area.height.value}
+        onTextInputFocus={onTextInputFocus}
       />
     </View>
   );

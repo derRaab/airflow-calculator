@@ -2,8 +2,17 @@ import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
 import { typography } from "@/src/themes/typography";
 import { lineHeightPadding } from "@/src/utils/textStyleUtils";
-import { FC, useState } from "react";
-import { StyleProp, Text, TextInput, View, ViewStyle } from "react-native";
+import { FC, MutableRefObject, useState } from "react";
+import {
+  NativeSyntheticEvent,
+  StyleProp,
+  Text,
+  TextInput,
+  TextInputFocusEventData,
+  View,
+  ViewStyle,
+} from "react-native";
+import { inputAccessoryViewID } from "./CalculatorInputAccessoryView";
 
 interface CalculatorTextInputProps {
   description: string;
@@ -11,8 +20,10 @@ interface CalculatorTextInputProps {
   minHeight: number;
   onChangeNumber: (number: number) => void;
   placeholder: string;
+  textInputRef: MutableRefObject<TextInput | undefined>;
   unit: string;
   value: number;
+  onTextInputFocus: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
 }
 
 export const CalculatorTextInput: FC<CalculatorTextInputProps> = ({
@@ -21,8 +32,10 @@ export const CalculatorTextInput: FC<CalculatorTextInputProps> = ({
   minHeight,
   onChangeNumber,
   placeholder,
+  textInputRef,
   unit,
   value,
+  onTextInputFocus,
 }) => {
   const colorScheme = usePreferredColorScheme();
   const containerStyle: StyleProp<ViewStyle> = {
@@ -102,12 +115,19 @@ export const CalculatorTextInput: FC<CalculatorTextInputProps> = ({
       <Text style={descriptionStyle}>{description}</Text>
       <View style={inputContainerStyle}>
         <TextInput
+          ref={textInputRef}
           keyboardType="numeric"
           onChangeText={onChangeText}
           placeholder={placeholder}
           placeholderTextColor={colorScheme.onSurface + "66"}
           style={textInputStyle}
           value={displayValue}
+          inputAccessoryViewID={inputAccessoryViewID}
+          onFocus={(e) => {
+            if (typeof onTextInputFocus === "function") {
+              onTextInputFocus(e);
+            }
+          }}
         ></TextInput>
         <Text style={unitStyle}>{unit}</Text>
       </View>

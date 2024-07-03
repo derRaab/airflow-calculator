@@ -2,8 +2,15 @@ import { Calculation, CalculationValue } from "@/src/calculation";
 import { translate } from "@/src/localization";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
-import React, { FC, useState } from "react";
-import { StyleProp, View, ViewStyle } from "react-native";
+import React, { FC, MutableRefObject, useState } from "react";
+import {
+  NativeSyntheticEvent,
+  StyleProp,
+  TextInput,
+  TextInputFocusEventData,
+  View,
+  ViewStyle,
+} from "react-native";
 import { CalculatorTextInput } from "./CalculatorTextInput";
 
 interface CalculatorVelocityInputProps {
@@ -11,6 +18,8 @@ interface CalculatorVelocityInputProps {
   layout: MaterialDesign3Layout;
   minHeight: number;
   onVelocityChange: (velocity: CalculationValue) => void;
+  velocityTextInputRef: MutableRefObject<TextInput | undefined>;
+  onTextInputFocus: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
 }
 
 export const CalculatorVelocityInput: FC<CalculatorVelocityInputProps> = ({
@@ -18,6 +27,8 @@ export const CalculatorVelocityInput: FC<CalculatorVelocityInputProps> = ({
   layout,
   minHeight,
   onVelocityChange,
+  velocityTextInputRef,
+  onTextInputFocus,
 }) => {
   const colorScheme = usePreferredColorScheme();
   const containerStyle: StyleProp<ViewStyle> = {
@@ -52,8 +63,10 @@ export const CalculatorVelocityInput: FC<CalculatorVelocityInputProps> = ({
         minHeight={0}
         onChangeNumber={onInputChange}
         placeholder={placeholder}
+        textInputRef={velocityTextInputRef}
         unit={unit}
         value={velocity.value}
+        onTextInputFocus={onTextInputFocus}
       />
     </View>
   );

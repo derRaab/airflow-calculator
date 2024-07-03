@@ -2,8 +2,15 @@ import { Calculation, CalculationValue } from "@/src/calculation";
 import { translate } from "@/src/localization";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
-import React, { FC, useState } from "react";
-import { StyleProp, View, ViewStyle } from "react-native";
+import React, { FC, MutableRefObject, useState } from "react";
+import {
+  NativeSyntheticEvent,
+  StyleProp,
+  TextInput,
+  TextInputFocusEventData,
+  View,
+  ViewStyle,
+} from "react-native";
 import { CalculatorTextInput } from "./CalculatorTextInput";
 
 interface CalculatorFlowrateInputProps {
@@ -11,6 +18,8 @@ interface CalculatorFlowrateInputProps {
   layout: MaterialDesign3Layout;
   minHeight: number;
   onFlowrateChange: (flowrate: CalculationValue) => void;
+  flowrateTextInputRef: MutableRefObject<TextInput | undefined>;
+  onTextInputFocus: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
 }
 
 export const CalculatorFlowrateInput: FC<CalculatorFlowrateInputProps> = ({
@@ -18,6 +27,8 @@ export const CalculatorFlowrateInput: FC<CalculatorFlowrateInputProps> = ({
   layout,
   minHeight,
   onFlowrateChange,
+  flowrateTextInputRef,
+  onTextInputFocus,
 }) => {
   const colorScheme = usePreferredColorScheme();
   const containerStyle: StyleProp<ViewStyle> = {
@@ -56,7 +67,9 @@ export const CalculatorFlowrateInput: FC<CalculatorFlowrateInputProps> = ({
         onChangeNumber={onInputChange}
         placeholder={placeholder}
         unit={unit}
-        value={flowrate}
+        value={flowrate.value}
+        textInputRef={flowrateTextInputRef}
+        onTextInputFocus={onTextInputFocus}
       />
     </View>
   );

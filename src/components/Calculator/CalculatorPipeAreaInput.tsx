@@ -8,8 +8,17 @@ import { translate } from "@/src/localization";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
 import { typography } from "@/src/themes/typography";
-import React, { FC, useState } from "react";
-import { StyleProp, Text, TextStyle, View, ViewStyle } from "react-native";
+import React, { FC, MutableRefObject, useState } from "react";
+import {
+  NativeSyntheticEvent,
+  StyleProp,
+  Text,
+  TextInput,
+  TextInputFocusEventData,
+  TextStyle,
+  View,
+  ViewStyle,
+} from "react-native";
 import { CalculatorTextInput } from "./CalculatorTextInput";
 
 export interface PipeArea {
@@ -22,6 +31,8 @@ interface CalculatorPipeAreaInputProps {
   layout: MaterialDesign3Layout;
   minHeight: number;
   onAreaChange: (area: PipeArea) => void;
+  diameterTextInputRef: MutableRefObject<TextInput | undefined>;
+  onTextInputFocus: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
 }
 
 export const CalculatorPipeAreaInput: FC<CalculatorPipeAreaInputProps> = ({
@@ -29,6 +40,8 @@ export const CalculatorPipeAreaInput: FC<CalculatorPipeAreaInputProps> = ({
   layout,
   minHeight,
   onAreaChange,
+  diameterTextInputRef,
+  onTextInputFocus,
 }) => {
   const colorScheme = usePreferredColorScheme();
   const containerStyle: StyleProp<ViewStyle> = {
@@ -88,8 +101,10 @@ export const CalculatorPipeAreaInput: FC<CalculatorPipeAreaInputProps> = ({
         minHeight={0}
         onChangeNumber={onDiameterChange}
         placeholder={diameterPlaceholder}
+        textInputRef={diameterTextInputRef}
         unit={diameterUnitText}
         value={area.diameter.value}
+        onTextInputFocus={onTextInputFocus}
       />
     </View>
   );

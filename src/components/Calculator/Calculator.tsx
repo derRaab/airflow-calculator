@@ -1,12 +1,21 @@
 import { Calculation, CalculationValue } from "@/src/calculation";
+import { translate } from "@/src/localization";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
 import * as Device from "expo-device";
-import React, { FC } from "react";
+import React, {
+  FC,
+  MutableRefObject,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
+  Keyboard,
   KeyboardAvoidingView,
   ScrollView,
   StatusBar,
+  TextInput,
   View,
   ViewStyle,
   useColorScheme,
@@ -15,6 +24,11 @@ import { EdgeInsets } from "react-native-safe-area-context";
 import { ThreeObject } from "../Three/ThreeObject";
 import { CalculatorDuctAreaInput, DuctArea } from "./CalculatorDuctAreaInput";
 import { CalculatorFlowrateInput } from "./CalculatorFlowrateInput";
+import {
+  CalculatorInputAccessorySetup,
+  CalculatorInputAccessorySetupKey,
+  CalculatorInputAccessoryView,
+} from "./CalculatorInputAccessoryView";
 import { CalculatorPipeAreaInput, PipeArea } from "./CalculatorPipeAreaInput";
 import { CalculatorResult } from "./CalculatorResult";
 import { CalculatorVelocityInput } from "./CalculatorVelocityInput";
@@ -32,35 +46,8 @@ export const Calculator: FC<CalculatorProps> = ({
   layout,
   onInputChange,
 }) => {
-  const resultInsets = {
-    top: insets.top,
-    right: insets.right,
-    bottom: 0,
-    left: insets.left,
-  };
-  const horizontalInsets = {
-    top: 0,
-    right: insets.right,
-    bottom: 0,
-    left: insets.left,
-  };
-  const resultMinHeight = insets.top * 2;
-
   const colorSchemeName = useColorScheme();
   const colorScheme = usePreferredColorScheme();
-  const surfaceStyle = {
-    flexGrow: 1,
-  };
-
-  const scrollViewStyle = {
-    padding: layout.padding,
-    gap: layout.gap,
-  };
-
-  const keyboardAvoidingViewStyle = {
-    backgroundColor: colorScheme.background,
-    flexGrow: 1,
-  };
 
   const onDuctAreaChange = (area: DuctArea) => {
     const newCalculation: Calculation = {
@@ -96,6 +83,160 @@ export const Calculator: FC<CalculatorProps> = ({
     };
     onInputChange(newCalculation);
   };
+
+  const onPreviousPress = () => {
+    const setup = updateTextInputFocus();
+    if (setup.previousTextInput) {
+      setup.previousTextInput.focus();
+    }
+  };
+  const onNextPress = () => {
+    const setup = updateTextInputFocus();
+    if (setup.nextTextInput) {
+      setup.nextTextInput.focus();
+    }
+  };
+
+  const widthTextInputRef = useRef<TextInput>();
+  const heightTextInputRef = useRef<TextInput>();
+  const diameterTextInputRef = useRef<TextInput>();
+  const velocityTextInputRef = useRef<TextInput>();
+  const flowrateTextInputRef = useRef<TextInput>();
+  const textInputRefList: MutableRefObject<TextInput | undefined>[] = [
+    widthTextInputRef,
+    heightTextInputRef,
+    diameterTextInputRef,
+    velocityTextInputRef,
+    flowrateTextInputRef,
+  ];
+
+  const [setup, setSetup] = useState<CalculatorInputAccessorySetup>({
+    keyboardShown: false,
+    onNextPress,
+    onPreviousPress,
+  });
+
+  const updateSetup = (setupChanges: CalculatorInputAccessorySetup) => {
+    let changes = false;
+    const keys = Object.keys(
+      setupChanges,
+    ) as CalculatorInputAccessorySetupKey[];
+    keys.forEach((key) => {
+      if (setup[key] !== setupChanges[key]) {
+        changes = true;
+      }
+    });
+    if (!changes) {
+      return;
+    }
+
+    const newSetup = {
+      ...setup,
+      ...setupChanges,
+    };
+
+    setSetup(newSetup);
+  };
+
+  const getTextInputLabel = (textInput: TextInput | null) => {
+    if (textInput) {
+      switch (textInput) {
+        case widthTextInputRef.current:
+          return translate("width");
+        case heightTextInputRef.current:
+          return translate("height");
+        case diameterTextInputRef.current:
+          return translate("diameter");
+        case velocityTextInputRef.current:
+          return translate("velocity");
+        case flowrateTextInputRef.current:
+          return translate("flowrate");
+      }
+    }
+    return "";
+  };
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      updateSetup({ keyboardShown: true });
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      updateSetup({ keyboardShown: false });
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  });
+
+  const updateTextInputFocus = () => {
+    let previousTextInput: TextInput | null = null;
+    let currentTextInput: TextInput | null = null;
+    let nextTextInput: TextInput | null = null;
+
+    if (textInputRefList) {
+      textInputRefList.forEach((textInputRef, index) => {
+        if (textInputRef) {
+          const textInput = textInputRef.current;
+          if (textInput) {
+            if (textInput.isFocused()) {
+              currentTextInput = textInput;
+            } else {
+              if (currentTextInput) {
+                if (!nextTextInput) nextTextInput = textInput;
+              } else {
+                previousTextInput = textInput;
+              }
+            }
+          }
+        }
+      });
+    }
+
+    const currentLabel = getTextInputLabel(currentTextInput);
+    const nextLabel = getTextInputLabel(nextTextInput);
+    const previousLabel = getTextInputLabel(previousTextInput);
+
+    const setupUpdate: CalculatorInputAccessorySetup = {
+      currentLabel,
+      currentTextInput,
+      nextLabel,
+      nextTextInput,
+      previousLabel,
+      previousTextInput,
+    };
+    updateSetup(setupUpdate);
+    return setupUpdate;
+  };
+
+  const onTextInputFocus = () => {
+    updateTextInputFocus();
+  };
+
+  const keyboardAvoidingViewStyle = {
+    backgroundColor: colorScheme.background,
+    flex: 1,
+    flexGrow: 1,
+  };
+
+  const resultInsets = {
+    top: insets.top,
+    right: insets.right,
+    bottom: 0,
+    left: insets.left,
+  };
+  const resultMinHeight = insets.top * 2;
+  const surfaceStyle = {
+    flexGrow: 1,
+  };
+
+  const scrollViewStyle = {
+    padding: layout.padding,
+    gap: layout.gap,
+    flexGrow: 1,
+  };
+
   const threeObjectContainerStyle: ViewStyle = {
     alignSelf: "center",
     width: "20%",
@@ -104,8 +245,8 @@ export const Calculator: FC<CalculatorProps> = ({
   return (
     <View style={surfaceStyle}>
       <StatusBar
-        barStyle={colorSchemeName === "dark" ? "dark-content" : "light-content"}
         backgroundColor="transparent"
+        barStyle={colorSchemeName === "dark" ? "dark-content" : "light-content"}
       />
       <CalculatorResult
         calculation={calculation}
@@ -113,22 +254,30 @@ export const Calculator: FC<CalculatorProps> = ({
         layout={layout}
         minHeight={resultMinHeight}
       />
-      <KeyboardAvoidingView behavior="height" style={keyboardAvoidingViewStyle}>
+      <KeyboardAvoidingView
+        behavior="padding"
+        style={keyboardAvoidingViewStyle}
+      >
         <ScrollView contentContainerStyle={scrollViewStyle}>
           {calculation.object === "duct" && (
             <CalculatorDuctAreaInput
               calculation={calculation}
+              heightTextInputRef={heightTextInputRef}
               layout={layout}
               minHeight={0}
               onAreaChange={onDuctAreaChange}
+              onTextInputFocus={onTextInputFocus}
+              widthTextInputRef={widthTextInputRef}
             />
           )}
           {calculation.object === "pipe" && (
             <CalculatorPipeAreaInput
               calculation={calculation}
+              diameterTextInputRef={diameterTextInputRef}
               layout={layout}
               minHeight={0}
               onAreaChange={onPipeAreaChange}
+              onTextInputFocus={onTextInputFocus}
             />
           )}
 
@@ -137,16 +286,20 @@ export const Calculator: FC<CalculatorProps> = ({
               calculation={calculation}
               layout={layout}
               minHeight={0}
+              onTextInputFocus={onTextInputFocus}
               onVelocityChange={onVelocityChange}
+              velocityTextInputRef={velocityTextInputRef}
             />
           )}
 
           {calculation.type === "velocity" && (
             <CalculatorFlowrateInput
               calculation={calculation}
+              flowrateTextInputRef={flowrateTextInputRef}
               layout={layout}
               minHeight={0}
               onFlowrateChange={onFlowrateChange}
+              onTextInputFocus={onTextInputFocus}
             />
           )}
           <View style={threeObjectContainerStyle}>
@@ -158,6 +311,11 @@ export const Calculator: FC<CalculatorProps> = ({
             )}
           </View>
         </ScrollView>
+        <CalculatorInputAccessoryView
+          colorScheme={colorScheme}
+          layout={layout}
+          setup={setup}
+        />
       </KeyboardAvoidingView>
     </View>
   );
