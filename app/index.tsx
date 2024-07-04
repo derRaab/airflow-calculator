@@ -50,7 +50,7 @@ export default function Index() {
     paddingHorizontal: layout.spacing,
     paddingTop: opticalVerticalPadding,
   };
-  const selectorContainerStyle = {
+  const selectorContainerStyle: ViewStyle = {
     flex: 1,
   };
   const infoContainerStyle: ViewStyle = {
@@ -86,32 +86,6 @@ export default function Index() {
       </View>
       <View style={infoContainerStyle}>
         <Link href="./(root)/info" style={infoContainerLinkTextStyle}>
-          Info
-        </Link>
-      </View>
-    </View>
-  );
-
-  return (
-    <View style={containerStyle}>
-      <View style={selectorsContainerStyle}>
-        <View style={selectorContainerStyle}>
-          <CalculationSelector
-            insets={selectorInsets}
-            layout={layout}
-            object="duct"
-          />
-        </View>
-        <View style={selectorContainerStyle}>
-          <CalculationSelector
-            insets={selectorInsets}
-            layout={layout}
-            object="pipe"
-          />
-        </View>
-      </View>
-      <View style={infoContainerStyle}>
-        <Link href="./(root)/info" style={{ color: colorScheme.onSurface }}>
           Info
         </Link>
       </View>
