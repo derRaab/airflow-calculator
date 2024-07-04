@@ -33,7 +33,13 @@ export const CalculationSelector: FC<CalculationSelectorProps> = ({
   };
 
   const threeObjectContainerStyle: ViewStyle = {
-    maxHeight: "30%",
+    maxWidth: "100%",
+    maxHeight: "100%",
+    position: "absolute",
+    padding: layout.padding,
+    flexShrink: 1,
+    justifyContent: "center",
+    alignItems: "center",
   };
 
   const buttonContainerStyle: ViewStyle = {

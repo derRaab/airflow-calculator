@@ -239,7 +239,8 @@ export const Calculator: FC<CalculatorProps> = ({
 
   const threeObjectContainerStyle: ViewStyle = {
     alignSelf: "center",
-    width: "20%",
+    maxHeight: "20%",
+    padding: layout.padding,
   };
 
   return (

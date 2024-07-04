@@ -14,7 +14,7 @@ import { Curve, Vector3 } from "three";
 const objectWidth = 1;
 const objectHeight = 1;
 const objectDepth = 2;
-const objectPosition = new THREE.Vector3(0.15, 0.15, 0);
+const objectPosition = new THREE.Vector3(0.125, 0.142, 0);
 
 // Duct size
 const ductWidth = objectWidth;
@@ -82,12 +82,17 @@ const camera = {
   fov: 60,
   near: 0.1,
   far: 1000,
-  zoom: 2.3,
+  zoom: 3.75,
   position: new THREE.Vector3(0, 0, 5),
 };
 
 const styles = StyleSheet.create({
-  canvasContainer: { aspectRatio: aspectRatio, opacity: 0.1 },
+  canvasContainer: {
+    width: "100%",
+    height: "100%",
+    aspectRatio: aspectRatio,
+    opacity: 0.1,
+  },
 });
 const rotationBase = { x: 15, y: -15, z: 0 };
 const xFactor = 2;
