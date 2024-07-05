@@ -1,22 +1,22 @@
 import { Calculation, CalculationValue } from "@/src/calculation";
 import { translate } from "@/src/localization";
-import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
+import { MaterialDesign3ColorScheme } from "@/src/themes/m3/MaterialDesign3ColorTheme";
+import { createCachedFactory } from "@/src/utils/factoryUtils";
 import React, { FC, MutableRefObject, useState } from "react";
 import {
   NativeSyntheticEvent,
-  StyleProp,
+  StyleSheet,
   TextInput,
   TextInputFocusEventData,
   View,
-  ViewStyle,
 } from "react-native";
 import { CalculatorTextInput } from "./CalculatorTextInput";
 
 interface CalculatorVelocityInputProps {
   calculation: Calculation;
+  colorScheme: MaterialDesign3ColorScheme;
   layout: MaterialDesign3Layout;
-  minHeight: number;
   onVelocityChange: (velocity: CalculationValue) => void;
   velocityTextInputRef: MutableRefObject<TextInput | undefined>;
   onTextInputFocus: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
@@ -24,19 +24,12 @@ interface CalculatorVelocityInputProps {
 
 export const CalculatorVelocityInput: FC<CalculatorVelocityInputProps> = ({
   calculation,
+  colorScheme,
   layout,
-  minHeight,
   onVelocityChange,
   velocityTextInputRef,
   onTextInputFocus,
 }) => {
-  const colorScheme = usePreferredColorScheme();
-  const containerStyle: StyleProp<ViewStyle> = {
-    backgroundColor: colorScheme.surfaceContainer,
-    minHeight,
-    padding: layout.padding,
-  };
-
   const [velocity, setVelocity] = useState<CalculationValue>({
     value: calculation.velocity.value,
     unit: calculation.velocity.unit,
@@ -55,8 +48,10 @@ export const CalculatorVelocityInput: FC<CalculatorVelocityInputProps> = ({
   const placeholder = translate("velocity");
   const unit = translate("m_s");
 
+  const styles = useLocalStyle(colorScheme, layout);
+
   return (
-    <View style={containerStyle}>
+    <View style={styles.containerStyle}>
       <CalculatorTextInput
         description={description}
         layout={layout}
@@ -71,3 +66,18 @@ export const CalculatorVelocityInput: FC<CalculatorVelocityInputProps> = ({
     </View>
   );
 };
+
+const createStyleSheet = (
+  colorScheme: MaterialDesign3ColorScheme,
+  layout: MaterialDesign3Layout,
+) => {
+  return StyleSheet.create({
+    containerStyle: {
+      backgroundColor: colorScheme.surfaceContainer,
+      padding: layout.padding,
+    },
+  });
+};
+
+const localStyleCache = new Map<any, any>();
+const useLocalStyle = createCachedFactory(localStyleCache, createStyleSheet);
