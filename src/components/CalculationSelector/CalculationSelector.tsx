@@ -1,59 +1,33 @@
-import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
+import { MaterialDesign3ColorScheme } from "@/src/themes/m3/MaterialDesign3ColorTheme";
+import { createCachedFactory } from "@/src/utils/factoryUtils";
+import * as Device from "expo-device";
 import React, { FC } from "react";
-import { View, ViewStyle } from "react-native";
-import { EdgeInsets } from "react-native-safe-area-context";
+import { StyleSheet, View } from "react-native";
 import { ThreeObject } from "../Three/ThreeObject";
 import { CalculationSelectorButton } from "./CalculationSelectorButton";
 
-import * as Device from "expo-device";
 interface CalculationSelectorProps {
-  insets: EdgeInsets;
+  colorScheme: MaterialDesign3ColorScheme;
   layout: MaterialDesign3Layout;
   object: "duct" | "pipe";
 }
 
 export const CalculationSelector: FC<CalculationSelectorProps> = ({
-  insets,
+  colorScheme,
   layout,
   object,
 }) => {
-  const colorScheme = usePreferredColorScheme();
-  const surfaceStyle: ViewStyle = {
-    backgroundColor: colorScheme.surfaceContainer,
-    borderRadius: layout.padding,
-    flexGrow: 1,
-    rowGap: layout.gap,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingTop: insets.top,
-    paddingLeft: insets.left,
-    paddingRight: insets.right,
-    paddingBottom: layout.spacing,
-  };
-
-  const threeObjectContainerStyle: ViewStyle = {
-    maxWidth: "100%",
-    maxHeight: "100%",
-    position: "absolute",
-    padding: layout.padding,
-    flexShrink: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  };
-
-  const buttonContainerStyle: ViewStyle = {
-    gap: layout.gap * 2,
-  };
+  const styles = useLocalStyle(colorScheme, layout);
 
   return (
-    <View style={surfaceStyle}>
-      <View style={threeObjectContainerStyle}>
+    <View style={styles.surfaceStyle}>
+      <View style={styles.threeObjectContainerStyle}>
         {Device.isDevice && (
           <ThreeObject colorScheme={colorScheme} object={object} />
         )}
       </View>
-      <View style={buttonContainerStyle}>
+      <View style={styles.buttonContainerStyle}>
         <CalculationSelectorButton
           object={object}
           type={"flowrate"}
@@ -68,3 +42,37 @@ export const CalculationSelector: FC<CalculationSelectorProps> = ({
     </View>
   );
 };
+
+const createStyleSheet = (
+  colorScheme: MaterialDesign3ColorScheme,
+  layout: MaterialDesign3Layout,
+) => {
+  return StyleSheet.create({
+    surfaceStyle: {
+      alignItems: "center",
+      backgroundColor: colorScheme.surfaceContainer,
+      borderRadius: layout.padding,
+      flexGrow: 1,
+      justifyContent: "center",
+      paddingBottom: layout.spacing,
+      rowGap: layout.gap,
+    },
+
+    threeObjectContainerStyle: {
+      alignItems: "center",
+      flexShrink: 1,
+      justifyContent: "center",
+      maxHeight: "100%",
+      maxWidth: "100%",
+      padding: layout.padding,
+      position: "absolute",
+    },
+
+    buttonContainerStyle: {
+      gap: layout.gap * 2,
+    },
+  });
+};
+
+const localStyleCache = new Map<any, any>();
+const useLocalStyle = createCachedFactory(localStyleCache, createStyleSheet);

@@ -38,14 +38,14 @@ export default function Index() {
       <View style={styles.selectorsContainerStyle}>
         <View style={styles.selectorContainerStyle}>
           <CalculationSelector
-            insets={selectorInsets}
+            colorScheme={colorScheme}
             layout={layout}
             object="duct"
           />
         </View>
         <View style={styles.selectorContainerStyle}>
           <CalculationSelector
-            insets={selectorInsets}
+            colorScheme={colorScheme}
             layout={layout}
             object="pipe"
           />
@@ -83,11 +83,12 @@ const createStyleSheet = (
 
   return StyleSheet.create({
     containerStyle: {
+      backgroundColor: colorScheme.background,
       flex: 1,
       flexDirection: "column",
       justifyContent: "flex-end",
-      backgroundColor: colorScheme.background,
     },
+
     selectorsContainerStyle: {
       flex: 1,
       flexGrow: 1,
@@ -95,19 +96,22 @@ const createStyleSheet = (
       paddingHorizontal: layout.spacing,
       paddingTop: opticalVerticalPadding,
     },
+
     selectorContainerStyle: {
       flex: 1,
     },
+
     infoContainerStyle: {
       flexBasis: "auto",
     },
+
     infoContainerLinkTextStyle: {
       ...infoTextStyle,
 
-      textAlign: "center",
       color: colorScheme.onSurface,
       paddingBottom: infoBottomPadding,
       paddingTop: layoutPadding,
+      textAlign: "center",
     },
   });
 };
