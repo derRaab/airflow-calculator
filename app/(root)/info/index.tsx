@@ -1,12 +1,14 @@
 import { translate } from "@/src/localization";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
+import { MaterialDesign3ColorScheme } from "@/src/themes/m3/MaterialDesign3ColorTheme";
 import { typography } from "@/src/themes/typography";
+import { createCachedFactory } from "@/src/utils/factoryUtils";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useAssets } from "expo-asset";
 import * as FileSystem from "expo-file-system";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Text, TextStyle, View, ViewStyle } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Index() {
@@ -39,27 +41,46 @@ export default function Index() {
     })();
   }, [assets]);
 
-  const rootContainerStyle: ViewStyle = {
-    alignItems: "center",
-    paddingTop: headerHeight,
-    paddingLeft: safeAreaInsets.left,
-    paddingRight: safeAreaInsets.right,
-    paddingBottom: safeAreaInsets.bottom,
-    flex: 1,
-    gap: 10,
-    justifyContent: "center",
-    backgroundColor: colorScheme.background,
-  };
-
-  const textStyle: TextStyle = {
-    ...typography.bodyLarge,
-
-    color: colorScheme.onBackground,
-  };
+  const styles = useLocalStyle(
+    colorScheme,
+    headerHeight,
+    safeAreaInsets.left,
+    safeAreaInsets.right,
+    safeAreaInsets.bottom,
+  );
 
   return (
-    <View style={rootContainerStyle}>
-      <Text style={textStyle}>{markdownContent}</Text>
+    <View style={styles.rootContainerStyle}>
+      <Text style={styles.textStyle}>{markdownContent}</Text>
     </View>
   );
 }
+
+const createStyleSheet = (
+  colorScheme: MaterialDesign3ColorScheme,
+  headerHeight: number,
+  safeAreaInsetsLeft: number,
+  safeAreaInsetsRight: number,
+  safeAreaInsetsBottom: number,
+) => {
+  return StyleSheet.create({
+    rootContainerStyle: {
+      alignItems: "center",
+      paddingTop: headerHeight,
+      paddingLeft: safeAreaInsetsLeft,
+      paddingRight: safeAreaInsetsRight,
+      paddingBottom: safeAreaInsetsBottom,
+      flex: 1,
+      gap: 10,
+      justifyContent: "center",
+      backgroundColor: colorScheme.background,
+    },
+    textStyle: {
+      ...typography.bodyLarge,
+      color: colorScheme.onBackground,
+    },
+  });
+};
+
+const localStyleCache = new Map<any, any>();
+const useLocalStyle = createCachedFactory(localStyleCache, createStyleSheet);
