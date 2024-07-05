@@ -4,7 +4,6 @@ export const nestedMap = (map: Map<any, any>, nestedKeys: any[]) => {
     const key = nestedKeys[i];
     let nextMap = currentMap.get(key);
     if (!nextMap) {
-      console.log("create new MAP at index " + i);
       nextMap = new Map<any, any>();
       currentMap.set(key, nextMap);
     }
