@@ -2,6 +2,8 @@ import { Calculation, CalculationValue } from "@/src/calculation";
 import { translate } from "@/src/localization";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
+import { MaterialDesign3ColorScheme } from "@/src/themes/m3/MaterialDesign3ColorTheme";
+import { createCachedFactory } from "@/src/utils/factoryUtils";
 import * as Device from "expo-device";
 import React, {
   FC,
@@ -15,10 +17,10 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   StatusBar,
+  StyleSheet,
   TextInput,
-  View,
-  ViewStyle,
   useColorScheme,
+  View,
 } from "react-native";
 import { EdgeInsets } from "react-native-safe-area-context";
 import { ThreeObject } from "../Three/ThreeObject";
@@ -214,37 +216,19 @@ export const Calculator: FC<CalculatorProps> = ({
     updateTextInputFocus();
   };
 
-  const keyboardAvoidingViewStyle = {
-    backgroundColor: colorScheme.background,
-    flex: 1,
-    flexGrow: 1,
-  };
-
   const resultInsets = {
     top: insets.top,
     right: insets.right,
     bottom: 0,
     left: insets.left,
   };
+
   const resultMinHeight = insets.top * 2;
-  const surfaceStyle = {
-    flexGrow: 1,
-  };
 
-  const scrollViewStyle = {
-    padding: layout.padding,
-    gap: layout.gap,
-    flexGrow: 1,
-  };
-
-  const threeObjectContainerStyle: ViewStyle = {
-    alignSelf: "center",
-    maxHeight: "20%",
-    padding: layout.padding,
-  };
+  const styles = useLocalStyle(colorScheme, layout);
 
   return (
-    <View style={surfaceStyle}>
+    <View style={styles.surfaceStyle}>
       <StatusBar
         backgroundColor="transparent"
         barStyle={colorSchemeName === "dark" ? "dark-content" : "light-content"}
@@ -257,9 +241,9 @@ export const Calculator: FC<CalculatorProps> = ({
       />
       <KeyboardAvoidingView
         behavior="padding"
-        style={keyboardAvoidingViewStyle}
+        style={styles.keyboardAvoidingViewStyle}
       >
-        <ScrollView contentContainerStyle={scrollViewStyle}>
+        <ScrollView contentContainerStyle={styles.scrollViewStyle}>
           {calculation.object === "duct" && (
             <CalculatorDuctAreaInput
               calculation={calculation}
@@ -303,7 +287,7 @@ export const Calculator: FC<CalculatorProps> = ({
               onTextInputFocus={onTextInputFocus}
             />
           )}
-          <View style={threeObjectContainerStyle}>
+          <View style={styles.threeObjectContainerStyle}>
             {Device.isDevice && (
               <ThreeObject
                 colorScheme={colorScheme}
@@ -321,3 +305,35 @@ export const Calculator: FC<CalculatorProps> = ({
     </View>
   );
 };
+
+const createStyleSheet = (
+  colorScheme: MaterialDesign3ColorScheme,
+  layout: MaterialDesign3Layout,
+) => {
+  return StyleSheet.create({
+    keyboardAvoidingViewStyle: {
+      backgroundColor: colorScheme.background,
+      flex: 1,
+      flexGrow: 1,
+    },
+
+    surfaceStyle: {
+      flexGrow: 1,
+    },
+
+    scrollViewStyle: {
+      padding: layout.padding,
+      gap: layout.gap,
+      flexGrow: 1,
+    },
+
+    threeObjectContainerStyle: {
+      alignSelf: "center",
+      maxHeight: "20%",
+      padding: layout.padding,
+    },
+  });
+};
+
+const localStyleCache = new Map<any, any>();
+const useLocalStyle = createCachedFactory(localStyleCache, createStyleSheet);
