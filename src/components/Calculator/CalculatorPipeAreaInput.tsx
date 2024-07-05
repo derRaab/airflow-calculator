@@ -5,19 +5,18 @@ import {
   convertToUnit,
 } from "@/src/calculation";
 import { translate } from "@/src/localization";
-import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
+import { MaterialDesign3ColorScheme } from "@/src/themes/m3/MaterialDesign3ColorTheme";
 import { typography } from "@/src/themes/typography";
+import { createCachedFactory } from "@/src/utils/factoryUtils";
 import React, { FC, MutableRefObject, useState } from "react";
 import {
   NativeSyntheticEvent,
-  StyleProp,
+  StyleSheet,
   Text,
   TextInput,
   TextInputFocusEventData,
-  TextStyle,
   View,
-  ViewStyle,
 } from "react-native";
 import { CalculatorTextInput } from "./CalculatorTextInput";
 
@@ -28,8 +27,8 @@ export interface PipeArea {
 
 interface CalculatorPipeAreaInputProps {
   calculation: Calculation;
+  colorScheme: MaterialDesign3ColorScheme;
   layout: MaterialDesign3Layout;
-  minHeight: number;
   onAreaChange: (area: PipeArea) => void;
   diameterTextInputRef: MutableRefObject<TextInput | undefined>;
   onTextInputFocus: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
@@ -37,25 +36,12 @@ interface CalculatorPipeAreaInputProps {
 
 export const CalculatorPipeAreaInput: FC<CalculatorPipeAreaInputProps> = ({
   calculation,
+  colorScheme,
   layout,
-  minHeight,
   onAreaChange,
   diameterTextInputRef,
   onTextInputFocus,
 }) => {
-  const colorScheme = usePreferredColorScheme();
-  const containerStyle: StyleProp<ViewStyle> = {
-    backgroundColor: colorScheme.surfaceContainer,
-    gap: layout.gap,
-    minHeight,
-    padding: layout.padding,
-  };
-  const areaTextStyle: TextStyle = {
-    ...typography.labelLarge,
-    color: colorScheme.onSurface,
-    textAlign: "center",
-  };
-
   const [area, setArea] = useState<PipeArea>({
     area: { value: calculation.area.value, unit: calculation.area.unit },
     diameter: {
@@ -92,9 +78,10 @@ export const CalculatorPipeAreaInput: FC<CalculatorPipeAreaInputProps> = ({
   const diameterPlaceholder = translate("diameter");
   const diameterUnitText = translate(diameterUnit);
 
+  const styles = useLocalStyle(colorScheme, layout);
   return (
-    <View style={containerStyle}>
-      <Text style={areaTextStyle}>{areaText}</Text>
+    <View style={styles.containerStyle}>
+      <Text style={styles.areaTextStyle}>{areaText}</Text>
       <CalculatorTextInput
         description={diameterDescription}
         layout={layout}
@@ -109,3 +96,25 @@ export const CalculatorPipeAreaInput: FC<CalculatorPipeAreaInputProps> = ({
     </View>
   );
 };
+
+const createStyleSheet = (
+  colorScheme: MaterialDesign3ColorScheme,
+  layout: MaterialDesign3Layout,
+) => {
+  return StyleSheet.create({
+    containerStyle: {
+      backgroundColor: colorScheme.surfaceContainer,
+      gap: layout.gap,
+      padding: layout.padding,
+    },
+
+    areaTextStyle: {
+      ...typography.labelLarge,
+      color: colorScheme.onSurface,
+      textAlign: "center",
+    },
+  });
+};
+
+const localStyleCache = new Map<any, any>();
+const useLocalStyle = createCachedFactory(localStyleCache, createStyleSheet);

@@ -258,9 +258,9 @@ export const Calculator: FC<CalculatorProps> = ({
           {calculation.object === "pipe" && (
             <CalculatorPipeAreaInput
               calculation={calculation}
+              colorScheme={colorScheme}
               diameterTextInputRef={diameterTextInputRef}
               layout={layout}
-              minHeight={0}
               onAreaChange={onPipeAreaChange}
               onTextInputFocus={onTextInputFocus}
             />
