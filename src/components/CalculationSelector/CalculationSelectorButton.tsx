@@ -1,87 +1,104 @@
 import { CalculationObject, CalculationType } from "@/src/calculation";
 import { translate } from "@/src/localization";
 import { symbol } from "@/src/symbol";
-import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
+import { MaterialDesign3ColorScheme } from "@/src/themes/m3/MaterialDesign3ColorTheme";
 import { typography } from "@/src/themes/typography";
+import { createCachedFactory } from "@/src/utils/factoryUtils";
 import { Link } from "expo-router";
 import React, { FC } from "react";
-import { Pressable, Text, View, ViewStyle } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+
 interface CalculationSelectorButtonProps {
+  colorScheme: MaterialDesign3ColorScheme;
   layout: MaterialDesign3Layout;
   object: CalculationObject;
   type: CalculationType;
 }
 
 export const CalculationSelectorButton: FC<CalculationSelectorButtonProps> = ({
+  colorScheme,
   layout,
   object,
   type,
 }) => {
-  const colorScheme = usePreferredColorScheme();
-
-  const labelTextStyle = {
-    ...typography.headlineSmall,
-
-    color: colorScheme.onPrimary,
-  };
-
-  const symbolTextStyle = {
-    ...typography.headlineSmall,
-
-    color: colorScheme.onPrimary,
-  };
-
-  const sympolSize = (symbolTextStyle.fontSize as number) * 1.8;
-  const symbolStyle: ViewStyle = {
-    paddingTop: 2,
-    alignItems: "center",
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderColor: colorScheme.onPrimary,
-    borderRadius: object === "pipe" ? sympolSize / 2 : 0,
-    height: sympolSize,
-    justifyContent: "center",
-    width: sympolSize,
-  };
-
-  const linkStyle: ViewStyle = {
-    backgroundColor: colorScheme.primary,
-    borderRadius: 1000,
-  };
-
-  const spacingHorizontal = layout.spacing;
-  const linkInnerStyle: ViewStyle = {
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    gap: spacingHorizontal,
-    paddingHorizontal: spacingHorizontal,
-    paddingVertical: 16,
-  };
-
-  const labelStyle: ViewStyle = {
-    flexGrow: 1,
-  };
   const objectTitle = translate(object);
-  const objectTitleTextStyle = {
-    ...typography.labelMedium,
+  const styles = useLocalStyle(colorScheme, layout, object);
 
-    color: colorScheme.onPrimary,
-  };
   return (
     <Link href={"./(root)/" + object + "/" + type} asChild>
-      <Pressable style={linkStyle}>
-        <View style={linkInnerStyle}>
-          <View style={symbolStyle}>
-            <Text style={symbolTextStyle}>{symbol(type)}</Text>
+      <Pressable style={styles.linkStyle}>
+        <View style={styles.linkInnerStyle}>
+          <View style={styles.symbolStyle}>
+            <Text style={styles.symbolTextStyle}>{symbol(type)}</Text>
           </View>
-          <View style={labelStyle}>
-            <Text style={labelTextStyle}>{translate(type)}</Text>
-            <Text style={objectTitleTextStyle}>{objectTitle}</Text>
+          <View style={styles.labelStyle}>
+            <Text style={styles.labelTextStyle}>{translate(type)}</Text>
+            <Text style={styles.objectTitleTextStyle}>{objectTitle}</Text>
           </View>
         </View>
       </Pressable>
     </Link>
   );
 };
+
+const createStyleSheet = (
+  colorScheme: MaterialDesign3ColorScheme,
+  layout: MaterialDesign3Layout,
+  object: CalculationObject,
+) => {
+  const symbolSize = (typography.headlineSmall.fontSize as number) * 1.8;
+
+  return StyleSheet.create({
+    labelTextStyle: {
+      ...typography.headlineSmall,
+
+      color: colorScheme.onPrimary,
+    },
+
+    symbolTextStyle: {
+      ...typography.headlineSmall,
+
+      color: colorScheme.onPrimary,
+    },
+
+    symbolStyle: {
+      alignItems: "center",
+      borderColor: colorScheme.onPrimary,
+      borderRadius: object === "pipe" ? symbolSize / 2 : 0,
+      borderStyle: "solid",
+      borderWidth: 1,
+      height: (typography.headlineSmall.fontSize as number) * 1.8,
+      justifyContent: "center",
+      paddingTop: 2,
+      width: symbolSize,
+    },
+
+    linkStyle: {
+      backgroundColor: colorScheme.primary,
+      borderRadius: 1000,
+    },
+
+    linkInnerStyle: {
+      alignItems: "center",
+      flexDirection: "row",
+      gap: layout.spacing,
+      justifyContent: "flex-start",
+      paddingHorizontal: layout.spacing,
+      paddingVertical: 16,
+    },
+
+    labelStyle: {
+      flexGrow: 1,
+    },
+
+    objectTitleTextStyle: {
+      ...typography.labelMedium,
+
+      color: colorScheme.onPrimary,
+    },
+  });
+};
+
+const localStyleCache = new Map<any, any>();
+const useLocalStyle = createCachedFactory(localStyleCache, createStyleSheet);

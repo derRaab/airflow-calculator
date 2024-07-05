@@ -29,14 +29,16 @@ export const CalculationSelector: FC<CalculationSelectorProps> = ({
       </View>
       <View style={styles.buttonContainerStyle}>
         <CalculationSelectorButton
+          colorScheme={colorScheme}
+          layout={layout}
           object={object}
           type={"flowrate"}
-          layout={layout}
         />
         <CalculationSelectorButton
+          colorScheme={colorScheme}
+          layout={layout}
           object={object}
           type={"velocity"}
-          layout={layout}
         />
       </View>
     </View>
