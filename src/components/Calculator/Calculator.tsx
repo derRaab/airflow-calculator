@@ -247,6 +247,7 @@ export const Calculator: FC<CalculatorProps> = ({
           {calculation.object === "duct" && (
             <CalculatorDuctAreaInput
               calculation={calculation}
+              colorScheme={colorScheme}
               heightTextInputRef={heightTextInputRef}
               layout={layout}
               onAreaChange={onDuctAreaChange}

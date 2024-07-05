@@ -5,7 +5,6 @@ import {
   convertToUnit,
 } from "@/src/calculation";
 import { translate } from "@/src/localization";
-import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
 import { MaterialDesign3ColorScheme } from "@/src/themes/m3/MaterialDesign3ColorTheme";
 import { typography } from "@/src/themes/typography";
@@ -29,6 +28,7 @@ export interface DuctArea {
 
 interface CalculatorDuctAreaInputProps {
   calculation: Calculation;
+  colorScheme: MaterialDesign3ColorScheme;
   heightTextInputRef: MutableRefObject<TextInput | undefined>;
   layout: MaterialDesign3Layout;
   onAreaChange: (area: DuctArea) => void;
@@ -38,14 +38,13 @@ interface CalculatorDuctAreaInputProps {
 
 export const CalculatorDuctAreaInput: FC<CalculatorDuctAreaInputProps> = ({
   calculation,
+  colorScheme,
   heightTextInputRef,
   layout,
   onAreaChange,
   widthTextInputRef,
   onTextInputFocus,
 }) => {
-  const colorScheme = usePreferredColorScheme();
-
   const [area, setArea] = useState<DuctArea>({
     area: { value: calculation.area.value, unit: calculation.area.unit },
     height: { value: calculation.height.value, unit: calculation.height.unit },
