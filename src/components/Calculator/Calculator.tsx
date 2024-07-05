@@ -249,7 +249,6 @@ export const Calculator: FC<CalculatorProps> = ({
               calculation={calculation}
               heightTextInputRef={heightTextInputRef}
               layout={layout}
-              minHeight={0}
               onAreaChange={onDuctAreaChange}
               onTextInputFocus={onTextInputFocus}
               widthTextInputRef={widthTextInputRef}

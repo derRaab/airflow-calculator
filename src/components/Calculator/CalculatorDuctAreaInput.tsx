@@ -7,17 +7,17 @@ import {
 import { translate } from "@/src/localization";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
+import { MaterialDesign3ColorScheme } from "@/src/themes/m3/MaterialDesign3ColorTheme";
 import { typography } from "@/src/themes/typography";
+import { createCachedFactory } from "@/src/utils/factoryUtils";
 import React, { FC, MutableRefObject, useState } from "react";
 import {
   NativeSyntheticEvent,
-  StyleProp,
+  StyleSheet,
   Text,
   TextInput,
   TextInputFocusEventData,
-  TextStyle,
   View,
-  ViewStyle,
 } from "react-native";
 import { CalculatorTextInput } from "./CalculatorTextInput";
 
@@ -31,7 +31,6 @@ interface CalculatorDuctAreaInputProps {
   calculation: Calculation;
   heightTextInputRef: MutableRefObject<TextInput | undefined>;
   layout: MaterialDesign3Layout;
-  minHeight: number;
   onAreaChange: (area: DuctArea) => void;
   widthTextInputRef: MutableRefObject<TextInput | undefined>;
   onTextInputFocus: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
@@ -41,23 +40,11 @@ export const CalculatorDuctAreaInput: FC<CalculatorDuctAreaInputProps> = ({
   calculation,
   heightTextInputRef,
   layout,
-  minHeight,
   onAreaChange,
   widthTextInputRef,
   onTextInputFocus,
 }) => {
   const colorScheme = usePreferredColorScheme();
-  const containerStyle: StyleProp<ViewStyle> = {
-    backgroundColor: colorScheme.surfaceContainer,
-    gap: layout.gap,
-    minHeight,
-    padding: layout.padding,
-  };
-  const areaTextStyle: TextStyle = {
-    ...typography.labelLarge,
-    color: colorScheme.onSurface,
-    textAlign: "center",
-  };
 
   const [area, setArea] = useState<DuctArea>({
     area: { value: calculation.area.value, unit: calculation.area.unit },
@@ -104,9 +91,11 @@ export const CalculatorDuctAreaInput: FC<CalculatorDuctAreaInputProps> = ({
   const heightPlaceholder = translate("height");
   const heightUnitText = translate(heightUnit);
 
+  const styles = useLocalStyle(colorScheme, layout);
+
   return (
-    <View style={containerStyle}>
-      <Text style={areaTextStyle}>{areaText}</Text>
+    <View style={styles.containerStyle}>
+      <Text style={styles.areaTextStyle}>{areaText}</Text>
       <CalculatorTextInput
         description={widthDescription}
         layout={layout}
@@ -132,3 +121,25 @@ export const CalculatorDuctAreaInput: FC<CalculatorDuctAreaInputProps> = ({
     </View>
   );
 };
+
+const createStyleSheet = (
+  colorScheme: MaterialDesign3ColorScheme,
+  layout: MaterialDesign3Layout,
+) => {
+  return StyleSheet.create({
+    containerStyle: {
+      backgroundColor: colorScheme.surfaceContainer,
+      gap: layout.gap,
+      padding: layout.padding,
+    },
+
+    areaTextStyle: {
+      ...typography.labelLarge,
+      color: colorScheme.onSurface,
+      textAlign: "center",
+    },
+  });
+};
+
+const localStyleCache = new Map<any, any>();
+const useLocalStyle = createCachedFactory(localStyleCache, createStyleSheet);
