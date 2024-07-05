@@ -13,18 +13,9 @@ import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Index() {
-  // NOTE: Header height contains safe area inset top!
-  const layout = usePreferredLayout();
   const colorScheme = usePreferredColorScheme();
+  const layout = usePreferredLayout();
   const safeAreaInsets = useSafeAreaInsets();
-
-  // Fullscreen calculator will also deal with safe area insets
-  const selectorInsets = {
-    bottom: 0,
-    left: Math.max(safeAreaInsets.left, layout.padding),
-    right: Math.max(safeAreaInsets.right, layout.padding),
-    top: 0,
-  };
 
   const styles = useLocalStyle(
     colorScheme,
