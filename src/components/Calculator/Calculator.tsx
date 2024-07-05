@@ -280,9 +280,9 @@ export const Calculator: FC<CalculatorProps> = ({
           {calculation.type === "velocity" && (
             <CalculatorFlowrateInput
               calculation={calculation}
+              colorScheme={colorScheme}
               flowrateTextInputRef={flowrateTextInputRef}
               layout={layout}
-              minHeight={0}
               onFlowrateChange={onFlowrateChange}
               onTextInputFocus={onTextInputFocus}
             />

@@ -1,22 +1,22 @@
 import { Calculation, CalculationValue } from "@/src/calculation";
 import { translate } from "@/src/localization";
-import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
+import { MaterialDesign3ColorScheme } from "@/src/themes/m3/MaterialDesign3ColorTheme";
+import { createCachedFactory } from "@/src/utils/factoryUtils";
 import React, { FC, MutableRefObject, useState } from "react";
 import {
   NativeSyntheticEvent,
-  StyleProp,
+  StyleSheet,
   TextInput,
   TextInputFocusEventData,
   View,
-  ViewStyle,
 } from "react-native";
 import { CalculatorTextInput } from "./CalculatorTextInput";
 
 interface CalculatorFlowrateInputProps {
   calculation: Calculation;
+  colorScheme: MaterialDesign3ColorScheme;
   layout: MaterialDesign3Layout;
-  minHeight: number;
   onFlowrateChange: (flowrate: CalculationValue) => void;
   flowrateTextInputRef: MutableRefObject<TextInput | undefined>;
   onTextInputFocus: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
@@ -24,19 +24,12 @@ interface CalculatorFlowrateInputProps {
 
 export const CalculatorFlowrateInput: FC<CalculatorFlowrateInputProps> = ({
   calculation,
+  colorScheme,
   layout,
-  minHeight,
   onFlowrateChange,
   flowrateTextInputRef,
   onTextInputFocus,
 }) => {
-  const colorScheme = usePreferredColorScheme();
-  const containerStyle: StyleProp<ViewStyle> = {
-    backgroundColor: colorScheme.surfaceContainer,
-    minHeight,
-    padding: layout.padding,
-  };
-
   const [flowrate, setFlowrate] = useState<CalculationValue>({
     value: calculation.flowrate.value,
     unit: calculation.flowrate.unit,
@@ -58,8 +51,10 @@ export const CalculatorFlowrateInput: FC<CalculatorFlowrateInputProps> = ({
   const placeholder = translate("flowrate");
   const unit = translate("m3_h");
 
+  const styles = useLocalStyle(colorScheme, layout);
+
   return (
-    <View style={containerStyle}>
+    <View style={styles.containerStyle}>
       <CalculatorTextInput
         description={description}
         layout={layout}
@@ -74,3 +69,18 @@ export const CalculatorFlowrateInput: FC<CalculatorFlowrateInputProps> = ({
     </View>
   );
 };
+
+const createStyleSheet = (
+  colorScheme: MaterialDesign3ColorScheme,
+  layout: MaterialDesign3Layout,
+) => {
+  return StyleSheet.create({
+    containerStyle: {
+      backgroundColor: colorScheme.surfaceContainer,
+      padding: layout.padding,
+    },
+  });
+};
+
+const localStyleCache = new Map<any, any>();
+const useLocalStyle = createCachedFactory(localStyleCache, createStyleSheet);
