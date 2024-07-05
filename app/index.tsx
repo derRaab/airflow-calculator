@@ -3,9 +3,13 @@ import {
   usePreferredColorScheme,
   usePreferredLayout,
 } from "@/src/themes/hooks";
+import { MaterialDesign3Layout } from "@/src/themes/layout";
+import { MaterialDesign3ColorScheme } from "@/src/themes/m3/MaterialDesign3ColorTheme";
 import { typography } from "@/src/themes/typography";
+import { createCachedFactory } from "@/src/utils/factoryUtils";
 import { Link } from "expo-router";
-import { TextStyle, View, ViewStyle } from "react-native";
+import React from "react";
+import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Index() {
@@ -22,12 +26,52 @@ export default function Index() {
     top: 0,
   };
 
+  const styles = useLocalStyle(
+    colorScheme,
+    layout,
+    safeAreaInsets.top,
+    safeAreaInsets.bottom,
+  );
+
+  return (
+    <View style={styles.containerStyle}>
+      <View style={styles.selectorsContainerStyle}>
+        <View style={styles.selectorContainerStyle}>
+          <CalculationSelector
+            insets={selectorInsets}
+            layout={layout}
+            object="duct"
+          />
+        </View>
+        <View style={styles.selectorContainerStyle}>
+          <CalculationSelector
+            insets={selectorInsets}
+            layout={layout}
+            object="pipe"
+          />
+        </View>
+      </View>
+      <View style={styles.infoContainerStyle}>
+        <Link href="./(root)/info" style={styles.infoContainerLinkTextStyle}>
+          Info
+        </Link>
+      </View>
+    </View>
+  );
+}
+
+const createStyleSheet = (
+  colorScheme: MaterialDesign3ColorScheme,
+  layout: MaterialDesign3Layout,
+  safeAreaInsetsTop: number,
+  safeAreaInsetsBottom: number,
+) => {
   const infoTextStyle = typography.labelLarge;
   const infoTextStyleLineHeight = infoTextStyle.lineHeight ?? 0;
   const layoutSpacing = layout.spacing;
   const layoutPadding = layout.padding;
-  const minimumTopPadding = Math.max(safeAreaInsets.top, layoutSpacing);
-  const minimumBottomPadding = Math.max(safeAreaInsets.bottom, layoutPadding);
+  const minimumTopPadding = Math.max(safeAreaInsetsTop, layoutSpacing);
+  const minimumBottomPadding = Math.max(safeAreaInsetsBottom, layoutPadding);
   const minimumBottomInfoHeight =
     layoutPadding + infoTextStyleLineHeight + minimumBottomPadding;
   const opticalVerticalPadding = Math.max(
@@ -37,58 +81,36 @@ export default function Index() {
   const infoBottomPadding =
     opticalVerticalPadding - layoutPadding - infoTextStyleLineHeight;
 
-  const containerStyle: ViewStyle = {
-    flex: 1,
-    flexDirection: "column",
-    justifyContent: "flex-end",
-    backgroundColor: colorScheme.background,
-  };
-  const selectorsContainerStyle = {
-    flex: 1,
-    flexGrow: 1,
-    gap: layout.spacing,
-    paddingHorizontal: layout.spacing,
-    paddingTop: opticalVerticalPadding,
-  };
-  const selectorContainerStyle: ViewStyle = {
-    flex: 1,
-  };
-  const infoContainerStyle: ViewStyle = {
-    flexBasis: "auto",
-  };
+  return StyleSheet.create({
+    containerStyle: {
+      flex: 1,
+      flexDirection: "column",
+      justifyContent: "flex-end",
+      backgroundColor: colorScheme.background,
+    },
+    selectorsContainerStyle: {
+      flex: 1,
+      flexGrow: 1,
+      gap: layout.spacing,
+      paddingHorizontal: layout.spacing,
+      paddingTop: opticalVerticalPadding,
+    },
+    selectorContainerStyle: {
+      flex: 1,
+    },
+    infoContainerStyle: {
+      flexBasis: "auto",
+    },
+    infoContainerLinkTextStyle: {
+      ...infoTextStyle,
 
-  const infoContainerLinkTextStyle: TextStyle = {
-    ...infoTextStyle,
+      textAlign: "center",
+      color: colorScheme.onSurface,
+      paddingBottom: infoBottomPadding,
+      paddingTop: layoutPadding,
+    },
+  });
+};
 
-    textAlign: "center",
-    color: colorScheme.onSurface,
-    paddingBottom: infoBottomPadding,
-    paddingTop: layoutPadding,
-  };
-
-  return (
-    <View style={containerStyle}>
-      <View style={selectorsContainerStyle}>
-        <View style={selectorContainerStyle}>
-          <CalculationSelector
-            insets={selectorInsets}
-            layout={layout}
-            object="duct"
-          />
-        </View>
-        <View style={selectorContainerStyle}>
-          <CalculationSelector
-            insets={selectorInsets}
-            layout={layout}
-            object="pipe"
-          />
-        </View>
-      </View>
-      <View style={infoContainerStyle}>
-        <Link href="./(root)/info" style={infoContainerLinkTextStyle}>
-          Info
-        </Link>
-      </View>
-    </View>
-  );
-}
+const localStyleCache = new Map<any, any>();
+const useLocalStyle = createCachedFactory(localStyleCache, createStyleSheet);
