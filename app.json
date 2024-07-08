@@ -2,7 +2,7 @@
   "expo": {
     "name": "airflow-calculator",
     "slug": "airflow-calculator",
-    "version": "1.0.0",
+    "version": "1.5.0",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
