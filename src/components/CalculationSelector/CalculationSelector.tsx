@@ -32,13 +32,13 @@ export const CalculationSelector: FC<CalculationSelectorProps> = ({
           colorScheme={colorScheme}
           layout={layout}
           object={object}
-          type={"flowrate"}
+          type={"velocity"}
         />
         <CalculationSelectorButton
           colorScheme={colorScheme}
           layout={layout}
           object={object}
-          type={"velocity"}
+          type={"flowrate"}
         />
       </View>
     </View>
