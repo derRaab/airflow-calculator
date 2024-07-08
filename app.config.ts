@@ -8,5 +8,9 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     slug: config.slug ?? "airflow-calculator",
   };
 
+  newConfig.ios = newConfig.ios || {};
+  newConfig.ios.bundleIdentifier =
+    process.env.EXPO_PUBLIC_IOS_BUNDLE_IDENTIFIER;
+
   return newConfig;
 };
