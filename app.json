@@ -32,11 +32,13 @@
       [
         "expo-asset",
         {
-          "assets": ["assets/markdown/info/de.md", "assets/markdown/info/en.md"]
+          "assets": [
+            "assets/markdown/info/de.md",
+            "assets/markdown/info/en.md"
+          ]
         }
       ]
     ],
-    
     "experiments": {
       "typedRoutes": true
     },
