@@ -13,7 +13,7 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
     },
     "android": {
       "adaptiveIcon": {
@@ -47,9 +47,15 @@
         "origin": false
       },
       "eas": {
-        "projectId": "fed47e24-7d36-48e8-af7e-8cf37c87c67a"
+        "projectId": ""
       }
     },
-    "owner": "derraab"
+    "owner": "derraab",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": ""
+    }
   }
 }

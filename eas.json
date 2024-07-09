@@ -13,7 +13,6 @@
         "image": "latest"
       },
       "env": {
-        "APP_VARIANT": "staging"
       },
     },
     "development-simulator": {
