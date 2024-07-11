@@ -19,12 +19,14 @@
     },
     "ios": {
       "supportsTablet": true,
+      "bundleIdentifier": "com.domain.appname"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.domain.appname"
     },
     "web": {
       "bundler": "metro",
@@ -52,15 +54,15 @@
         "origin": false
       },
       "eas": {
-        "projectId": ""
+        "projectId": "xxx-xxx-xxx-xxx"
       }
     },
-    "owner": "derraab",
+    "owner": "owner",
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
-      "url": ""
+      "url": "https://u.expo.dev/xxx-xxx-xxx-xxx"
     }
   }
 }
