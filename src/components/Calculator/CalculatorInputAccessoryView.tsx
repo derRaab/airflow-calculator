@@ -90,8 +90,8 @@ const createStyleSheet = (
     buttonStyle: {
       backgroundColor: colorScheme.primary,
       borderRadius: 1000,
-      padding: layout.padding / 2,
-      paddingHorizontal: layout.padding,
+      padding: layout.padding,
+      paddingHorizontal: layout.padding * 2,
     },
 
     buttonTextStyle: {

@@ -158,6 +158,24 @@ export const Calculator: FC<CalculatorProps> = ({
     return "";
   };
 
+  const getTextInputUnit = (textInput: TextInput | null) => {
+    if (textInput) {
+      switch (textInput) {
+        case widthTextInputRef.current:
+          return translate(calculation.width.unit);
+        case heightTextInputRef.current:
+          return translate(calculation.width.unit);
+        case diameterTextInputRef.current:
+          return translate(calculation.diameter.unit);
+        case velocityTextInputRef.current:
+          return translate(calculation.velocity.unit);
+        case flowrateTextInputRef.current:
+          return translate(calculation.flowrate.unit);
+      }
+    }
+    return "";
+  };
+
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
       updateSetup({ keyboardShown: true });
@@ -196,11 +214,14 @@ export const Calculator: FC<CalculatorProps> = ({
       });
     }
 
-    const currentLabel = getTextInputLabel(currentTextInput);
+    const currentLabel =
+      getTextInputLabel(currentTextInput) +
+      " | " +
+      getTextInputUnit(currentTextInput);
     const nextLabel = getTextInputLabel(nextTextInput);
     const previousLabel = getTextInputLabel(previousTextInput);
 
-    const setupUpdate: CalculatorInputAccessorySetup = {
+    return {
       currentLabel,
       currentTextInput,
       nextLabel,
@@ -208,12 +229,11 @@ export const Calculator: FC<CalculatorProps> = ({
       previousLabel,
       previousTextInput,
     };
-    updateSetup(setupUpdate);
-    return setupUpdate;
   };
 
   const onTextInputFocus = () => {
-    updateTextInputFocus();
+    const setup = updateTextInputFocus();
+    updateSetup(setup);
   };
 
   const resultInsets = {
