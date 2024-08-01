@@ -9,6 +9,7 @@ import { MaterialDesign3Layout } from "@/src/themes/layout";
 import { MaterialDesign3ColorScheme } from "@/src/themes/m3/MaterialDesign3ColorTheme";
 import { typography } from "@/src/themes/typography";
 import { createCachedFactory } from "@/src/utils/factoryUtils";
+import { valueToLocaleString } from "@/src/utils/numberUtils";
 import React, { FC, MutableRefObject, useState } from "react";
 import {
   NativeSyntheticEvent,
@@ -77,7 +78,7 @@ export const CalculatorDuctAreaInput: FC<CalculatorDuctAreaInputProps> = ({
   const areaText =
     translate("a_inSquareMeters", translate("area")) +
     ": " +
-    areaM2.value +
+    valueToLocaleString(areaM2.value, 0, 3) +
     " m²";
 
   const widthUnit = "mm";
