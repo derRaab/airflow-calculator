@@ -3,10 +3,35 @@ import { translate } from "@/src/localization";
 import { usePreferredColorScheme } from "@/src/themes/hooks";
 import { MaterialDesign3Layout } from "@/src/themes/layout";
 import { typography } from "@/src/themes/typography";
+import { valueToLocaleString } from "@/src/utils/numberUtils";
 import { capitalizeFirstLetter } from "@/src/utils/stringutils";
 import { FC } from "react";
 import { StyleProp, Text, TextStyle, View, ViewStyle } from "react-native";
 import { EdgeInsets } from "react-native-safe-area-context";
+
+const resultDescriptionFromCalulation = (calculation: Calculation) => {
+  const object = calculation.object;
+  const type = calculation.type;
+
+  if (object === "duct") {
+    if (type === "flowrate") {
+      return translate("a_inCubicMetersPerHour", translate("ductFlowrate"));
+    }
+    if (type === "velocity") {
+      return translate("a_inMetersPerSecond", translate("ductVelocity"));
+    }
+  }
+
+  if (object === "pipe") {
+    if (type === "flowrate") {
+      return translate("a_inCubicMetersPerHour", translate("pipeFlowrate"));
+    }
+    if (type === "velocity") {
+      return translate("a_inMetersPerSecond", translate("pipeVelocity"));
+    }
+  }
+  return object + " " + type;
+};
 
 interface CalculatorResultProps {
   calculation: Calculation;
@@ -59,30 +84,6 @@ export const CalculatorResult: FC<CalculatorResultProps> = ({
     color: colorScheme.onPrimary,
   };
 
-  const resultDescriptionFromCalulation = (calculation: Calculation) => {
-    const object = calculation.object;
-    const type = calculation.type;
-
-    if (object === "duct") {
-      if (type === "flowrate") {
-        return translate("a_inCubicMetersPerHour", translate("ductFlowrate"));
-      }
-      if (type === "velocity") {
-        return translate("a_inMetersPerSecond", translate("ductVelocity"));
-      }
-    }
-
-    if (object === "pipe") {
-      if (type === "flowrate") {
-        return translate("a_inCubicMetersPerHour", translate("pipeFlowrate"));
-      }
-      if (type === "velocity") {
-        return translate("a_inMetersPerSecond", translate("pipeVelocity"));
-      }
-    }
-    return object + " " + type;
-  };
-
   return (
     <View style={containerStyle}>
       <Text style={descriptionStyle}>
@@ -90,10 +91,7 @@ export const CalculatorResult: FC<CalculatorResultProps> = ({
       </Text>
       <View style={resultContainerStyle}>
         <Text adjustsFontSizeToFit={true} numberOfLines={1} style={resultStyle}>
-          {calculation.result.value.toLocaleString(undefined, {
-            maximumFractionDigits: 2,
-            minimumFractionDigits: 2,
-          })}
+          {valueToLocaleString(calculation.result.value, 0, 2)}
         </Text>
         <Text style={unitStyle}>
           {" " + translate(calculation.result.unit)}
