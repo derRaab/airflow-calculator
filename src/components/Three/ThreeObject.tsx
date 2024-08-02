@@ -6,9 +6,10 @@ import { Canvas } from "@react-three/fiber";
 import { DeviceMotion, DeviceMotionMeasurement } from "expo-sensors";
 import { Subscription } from "expo-sensors/build/Pedometer";
 import { THREE } from "expo-three";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Curve, Vector3 } from "three";
+import { ThreeUseFrame } from "./ThreeUseFrame";
 
 // Object size in general
 const objectWidth = 1;
@@ -116,9 +117,14 @@ const convertRotation = ({
 interface ThreeObjectProps {
   colorScheme: MaterialDesign3ColorScheme;
   object: CalculationObject | "both";
+  onFirstFrame: () => void;
 }
 
-export const ThreeObject: FC<ThreeObjectProps> = ({ colorScheme, object }) => {
+export const ThreeObject: FC<ThreeObjectProps> = ({
+  colorScheme,
+  object,
+  onFirstFrame,
+}) => {
   const [subscription, setSubscription] = useState<Subscription | null>(null);
 
   const _subscribe = () => {
@@ -151,6 +157,12 @@ export const ThreeObject: FC<ThreeObjectProps> = ({ colorScheme, object }) => {
   const showDuct = object === "duct" || object === "both";
   const showPipe = object === "pipe" || object === "both";
 
+  const meshDuctBottomPlaneRef = useRef<any>();
+  const meshDuctLeftPlaneRef = useRef<any>();
+  const meshDuctRightPlaneRef = useRef<any>();
+  const meshDuctTopPlaneRef = useRef<any>();
+  const meshPipeRef = useRef<any>();
+
   return (
     <View style={styles.canvasContainer}>
       <Canvas camera={camera}>
@@ -177,8 +189,15 @@ export const ThreeObject: FC<ThreeObjectProps> = ({ colorScheme, object }) => {
           />
         )}
 
+        <ThreeUseFrame onFirstFrame={() => onFirstFrame()} />
+
         {showPipe && (
-          <mesh castShadow position={objectPosition} rotation={rotation}>
+          <mesh
+            castShadow
+            position={objectPosition}
+            ref={meshPipeRef}
+            rotation={rotation}
+          >
             <tubeGeometry args={pipeGeometryArgs} />
             <meshStandardMaterial
               color={materialColor}
@@ -193,6 +212,7 @@ export const ThreeObject: FC<ThreeObjectProps> = ({ colorScheme, object }) => {
               castShadow
               position={ductTopPlanePosition}
               receiveShadow
+              ref={meshDuctTopPlaneRef}
               rotation={ductWidthPlaneRotation}
             >
               <planeGeometry args={ductWidthPlaneGeometryArgs} />
@@ -206,6 +226,7 @@ export const ThreeObject: FC<ThreeObjectProps> = ({ colorScheme, object }) => {
               castShadow
               position={ductLeftPlanePosition}
               receiveShadow
+              ref={meshDuctLeftPlaneRef}
               rotation={ductHeightPlaneRotation}
             >
               <planeGeometry args={ductHeightPlaneGeometryArgs} />
@@ -219,6 +240,7 @@ export const ThreeObject: FC<ThreeObjectProps> = ({ colorScheme, object }) => {
               castShadow
               position={ductRightPlanePosition}
               receiveShadow
+              ref={meshDuctRightPlaneRef}
               rotation={ductHeightPlaneRotation}
             >
               <planeGeometry args={ductHeightPlaneGeometryArgs} />
@@ -232,6 +254,7 @@ export const ThreeObject: FC<ThreeObjectProps> = ({ colorScheme, object }) => {
               castShadow
               position={ductBottomPlanePosition}
               receiveShadow
+              ref={meshDuctBottomPlaneRef}
               rotation={ductWidthPlaneRotation}
             >
               <planeGeometry args={ductWidthPlaneGeometryArgs} />
