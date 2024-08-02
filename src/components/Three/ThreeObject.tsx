@@ -189,7 +189,11 @@ export const ThreeObject: FC<ThreeObjectProps> = ({
           />
         )}
 
-        <ThreeUseFrame onFirstFrame={() => onFirstFrame()} />
+        <ThreeUseFrame
+          onFirstFrame={() => {
+            if (typeof onFirstFrame === "function") onFirstFrame();
+          }}
+        />
 
         {showPipe && (
           <mesh
