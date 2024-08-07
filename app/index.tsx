@@ -7,8 +7,8 @@ import { MaterialDesign3Layout } from "@/src/themes/layout";
 import { MaterialDesign3ColorScheme } from "@/src/themes/m3/MaterialDesign3ColorTheme";
 import { typography } from "@/src/themes/typography";
 import { createCachedFactory } from "@/src/utils/factoryUtils";
-import { Link } from "expo-router";
-import React from "react";
+import { Link, SplashScreen } from "expo-router";
+import React, { useRef } from "react";
 import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -24,6 +24,23 @@ export default function Index() {
     safeAreaInsets.bottom,
   );
 
+  const hasRenderedDuct = useRef(false);
+  const hasRenderedPipe = useRef(false);
+
+  const hideSplashScreen = () => {
+    if (!hasRenderedDuct.current || !hasRenderedPipe.current) return;
+    SplashScreen.hideAsync();
+  };
+
+  const onDuctFirstRender = () => {
+    hasRenderedDuct.current = true;
+    hideSplashScreen();
+  };
+  const onPipeFirstRender = () => {
+    hasRenderedPipe.current = true;
+    hideSplashScreen();
+  };
+
   return (
     <View style={styles.containerStyle}>
       <View style={styles.selectorsContainerStyle}>
@@ -32,6 +49,7 @@ export default function Index() {
             colorScheme={colorScheme}
             layout={layout}
             object="duct"
+            onFirstRender={onDuctFirstRender}
           />
         </View>
         <View style={styles.selectorContainerStyle}>
@@ -39,6 +57,7 @@ export default function Index() {
             colorScheme={colorScheme}
             layout={layout}
             object="pipe"
+            onFirstRender={onPipeFirstRender}
           />
         </View>
       </View>

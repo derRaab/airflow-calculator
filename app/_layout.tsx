@@ -4,12 +4,15 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
-import { Stack } from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
 import { THREE } from "expo-three";
 import { useColorScheme } from "react-native";
 
 // This is needed to make THREE global
 (global as any).THREE = (global as any).THREE || THREE;
+
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorSchemeName = useColorScheme();
