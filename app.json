@@ -7,26 +7,36 @@
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#FCF8FF",
-      "dark":{
-        "image": "./assets/images/splash.dark.png",
-        "resizeMode": "contain",
-        "backgroundColor": "#131318"
-      }
-    },
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.domain.appname"
+      "bundleIdentifier": "com.domain.appname",
+      "splash": {
+        "image": "./assets/images/splash.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#FCF8FF",
+        "dark":{
+          "image": "./assets/images/splash.dark.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#131318"
+        }
+      },
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.domain.appname"
+      "package": "com.domain.appname",
+      "splash": {
+        "image": "./assets/images/splash.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#FCF8FF",
+        "dark":{
+          "image": "./assets/images/splash.dark.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#131318"
+        }
+      }
     },
     "web": {
       "bundler": "metro",
