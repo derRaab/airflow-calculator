@@ -86,7 +86,7 @@ const createStyleSheet = (
     surfaceStyle: {
       alignItems: "center",
       backgroundColor: colorScheme.surfaceContainer,
-      borderRadius: layout.padding,
+      borderRadius: layout.spacing,
       flexGrow: 1,
       justifyContent: "center",
       rowGap: layout.gap,
@@ -98,12 +98,12 @@ const createStyleSheet = (
       justifyContent: "center",
       maxHeight: "100%",
       maxWidth: "100%",
-      padding: layout.padding,
+      padding: layout.spacing,
       position: "absolute",
     },
 
     buttonContainerStyle: {
-      gap: layout.gap * 2,
+      gap: layout.spacing,
     },
   });
 };
