@@ -11,11 +11,11 @@
       "bundleIdentifier": "com.domain.appname",
       "splash": {
         "image": "./assets/images/splash.png",
-        "resizeMode": "contain",
+        "resizeMode": "cover",
         "backgroundColor": "#FCF8FF",
         "dark":{
           "image": "./assets/images/splash.dark.png",
-          "resizeMode": "contain",
+          "resizeMode": "cover",
           "backgroundColor": "#131318"
         }
       },
@@ -29,11 +29,11 @@
       "package": "com.domain.appname",
       "splash": {
         "image": "./assets/images/splash.png",
-        "resizeMode": "contain",
+        "resizeMode": "cover",
         "backgroundColor": "#FCF8FF",
         "dark":{
           "image": "./assets/images/splash.dark.png",
-          "resizeMode": "contain",
+          "resizeMode": "cover",
           "backgroundColor": "#131318"
         }
       }
