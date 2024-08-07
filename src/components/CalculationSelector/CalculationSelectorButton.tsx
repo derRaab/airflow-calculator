@@ -8,11 +8,15 @@ import { createCachedFactory } from "@/src/utils/factoryUtils";
 import { Link } from "expo-router";
 import React, { FC } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import Animate, { SharedValue } from "react-native-reanimated";
+
+const AnimatedLink = Animate.createAnimatedComponent(Link);
 
 interface CalculationSelectorButtonProps {
   colorScheme: MaterialDesign3ColorScheme;
   layout: MaterialDesign3Layout;
   object: CalculationObject;
+  opacity: SharedValue<number>;
   type: CalculationType;
 }
 
@@ -20,13 +24,18 @@ export const CalculationSelectorButton: FC<CalculationSelectorButtonProps> = ({
   colorScheme,
   layout,
   object,
+  opacity,
   type,
 }) => {
   const objectTitle = translate(object);
   const styles = useLocalStyle(colorScheme, layout, object);
 
   return (
-    <Link href={"./(root)/" + object + "/" + type} asChild>
+    <AnimatedLink
+      asChild
+      href={`./(root)/${object}/${type}`}
+      style={{ opacity }}
+    >
       <Pressable style={styles.linkStyle}>
         <View style={styles.linkInnerStyle}>
           <View style={styles.symbolStyle}>
@@ -38,7 +47,7 @@ export const CalculationSelectorButton: FC<CalculationSelectorButtonProps> = ({
           </View>
         </View>
       </Pressable>
-    </Link>
+    </AnimatedLink>
   );
 };
 

@@ -4,6 +4,7 @@ import { createCachedFactory } from "@/src/utils/factoryUtils";
 import * as Device from "expo-device";
 import React, { FC, useCallback, useEffect, useRef } from "react";
 import { StyleSheet, View } from "react-native";
+import Animated, { SharedValue } from "react-native-reanimated";
 import { ThreeObject } from "../Three/ThreeObject";
 import { CalculationSelectorButton } from "./CalculationSelectorButton";
 
@@ -12,6 +13,9 @@ interface CalculationSelectorProps {
   layout: MaterialDesign3Layout;
   object: "duct" | "pipe";
   onFirstRender: () => void;
+  opacityBackground: SharedValue<number>;
+  opacityButtonA: SharedValue<number>;
+  opacityButtonB: SharedValue<number>;
 }
 
 export const CalculationSelector: FC<CalculationSelectorProps> = ({
@@ -19,6 +23,9 @@ export const CalculationSelector: FC<CalculationSelectorProps> = ({
   layout,
   object,
   onFirstRender,
+  opacityBackground,
+  opacityButtonA,
+  opacityButtonB,
 }) => {
   const styles = useLocalStyle(colorScheme, layout);
 
@@ -50,8 +57,10 @@ export const CalculationSelector: FC<CalculationSelectorProps> = ({
   useEffect(onUseEffect, [dispatchOnFirstRender]);
 
   return (
-    <View style={styles.surfaceStyle}>
-      <View style={styles.threeObjectContainerStyle}>
+    <Animated.View
+      style={[styles.surfaceStyle, { opacity: opacityBackground }]}
+    >
+      <Animated.View style={styles.threeObjectContainerStyle}>
         {Device.isDevice && (
           <ThreeObject
             colorScheme={colorScheme}
@@ -59,22 +68,24 @@ export const CalculationSelector: FC<CalculationSelectorProps> = ({
             onFirstFrame={() => onThreeObjectFirstFrame()}
           />
         )}
-      </View>
+      </Animated.View>
       <View style={styles.buttonContainerStyle}>
         <CalculationSelectorButton
           colorScheme={colorScheme}
           layout={layout}
           object={object}
+          opacity={opacityButtonA}
           type={"velocity"}
         />
         <CalculationSelectorButton
           colorScheme={colorScheme}
           layout={layout}
           object={object}
+          opacity={opacityButtonB}
           type={"flowrate"}
         />
       </View>
-    </View>
+    </Animated.View>
   );
 };
 

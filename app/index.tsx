@@ -9,13 +9,57 @@ import { typography } from "@/src/themes/typography";
 import { createCachedFactory } from "@/src/utils/factoryUtils";
 import { Link, SplashScreen } from "expo-router";
 import React, { useRef } from "react";
-import { StyleSheet, View } from "react-native";
+import { AccessibilityInfo, StyleSheet, View } from "react-native";
+import {
+  Easing,
+  ReduceMotion,
+  useSharedValue,
+  withDelay,
+  withTiming,
+  WithTimingConfig,
+} from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Index() {
   const colorScheme = usePreferredColorScheme();
   const layout = usePreferredLayout();
   const safeAreaInsets = useSafeAreaInsets();
+
+  const opacityABackground = useSharedValue(0);
+  const opacityAButtonA = useSharedValue(0);
+  const opacityAButtonB = useSharedValue(0);
+  const opacityBBackground = useSharedValue(0);
+  const opacityBButtonA = useSharedValue(0);
+  const opacityBButtonB = useSharedValue(0);
+
+  const startOpacityAnimation = async () => {
+    if (opacityABackground.value === 1) return;
+
+    const reduceMotionEnabled =
+      (await AccessibilityInfo.isReduceMotionEnabled()) ?? false;
+    if (reduceMotionEnabled) {
+      opacityABackground.value = 1;
+      opacityAButtonA.value = 1;
+      opacityAButtonB.value = 1;
+      opacityBBackground.value = 1;
+      opacityBButtonA.value = 1;
+      opacityBButtonB.value = 1;
+      return;
+    }
+
+    const timingConfig: WithTimingConfig = {
+      duration: 400,
+      easing: Easing.in(Easing.ease),
+      reduceMotion: ReduceMotion.Never,
+    };
+
+    opacityABackground.value = withDelay(0, withTiming(1, timingConfig));
+    opacityBBackground.value = withDelay(200, withTiming(1, timingConfig));
+    opacityAButtonA.value = withDelay(700, withTiming(1, timingConfig));
+    opacityAButtonB.value = withDelay(900, withTiming(1, timingConfig));
+    opacityBButtonA.value = withDelay(1100, withTiming(1, timingConfig));
+    opacityBButtonB.value = withDelay(1300, withTiming(1, timingConfig));
+  };
 
   const styles = useLocalStyle(
     colorScheme,
@@ -30,6 +74,7 @@ export default function Index() {
   const hideSplashScreen = () => {
     if (!hasRenderedDuct.current || !hasRenderedPipe.current) return;
     SplashScreen.hideAsync();
+    startOpacityAnimation();
   };
 
   const onDuctFirstRender = () => {
@@ -46,6 +91,9 @@ export default function Index() {
       <View style={styles.selectorsContainerStyle}>
         <View style={styles.selectorContainerStyle}>
           <CalculationSelector
+            opacityBackground={opacityABackground}
+            opacityButtonA={opacityAButtonA}
+            opacityButtonB={opacityAButtonB}
             colorScheme={colorScheme}
             layout={layout}
             object="duct"
@@ -54,6 +102,9 @@ export default function Index() {
         </View>
         <View style={styles.selectorContainerStyle}>
           <CalculationSelector
+            opacityBackground={opacityBBackground}
+            opacityButtonA={opacityBButtonA}
+            opacityButtonB={opacityBButtonB}
             colorScheme={colorScheme}
             layout={layout}
             object="pipe"
