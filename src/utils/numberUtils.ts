@@ -49,7 +49,6 @@ export const valueToLocaleString = (
     fixedResultValue = parseFloat(resultValue.toFixed(maxFractionDigits));
   }
 
-  console.log(resultValue, fixedResultValue, maxFractionDigits);
   const fixedResultValueLocaleString = resultValue.toLocaleString(undefined, {
     maximumFractionDigits: maxFractionDigits,
     minimumFractionDigits: minFractionDigits,
