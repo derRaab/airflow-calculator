@@ -4,7 +4,7 @@ import { typography } from "@/src/themes/typography";
 import { createCachedFactory } from "@/src/utils/factoryUtils";
 import { FC } from "react";
 import { PixelRatio, StyleSheet, Text, View } from "react-native";
-import { ThreeObject } from "../Three/ThreeObject";
+import { ThreeObject } from "../../Three/ThreeObject";
 
 interface AppIconProps {
   colorScheme: MaterialDesign3ColorScheme;
