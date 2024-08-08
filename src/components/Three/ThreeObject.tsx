@@ -117,7 +117,7 @@ const convertRotation = ({
 interface ThreeObjectProps {
   colorScheme: MaterialDesign3ColorScheme;
   object: CalculationObject | "both";
-  onFirstFrame: () => void;
+  onFirstFrame?: () => void;
 }
 
 export const ThreeObject: FC<ThreeObjectProps> = ({
