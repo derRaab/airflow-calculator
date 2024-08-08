@@ -9,7 +9,7 @@ import * as MediaLibrary from "expo-media-library";
 import React, { FC, useCallback, useRef, useState } from "react";
 import { Alert, Pressable, StyleSheet, View } from "react-native";
 import ViewShot from "react-native-view-shot";
-import { AppIcon } from "./AppIcon";
+import { AppIcon2 } from "./AppIcon2";
 
 interface IconVariation {
   colorScheme: MaterialDesign3ColorScheme;
@@ -23,7 +23,7 @@ const darkColorScheme = selectColorScheme(materialTheme.schemes, "dark");
 const colorSchemes = [lightColorScheme, darkColorScheme];
 const objects: CalculationObject[] = ["duct", "pipe"];
 const pixelSizes = [1024];
-const texts = ["air"];
+const texts = [""];
 
 const iconVariations: IconVariation[] = [];
 
@@ -37,7 +37,7 @@ pixelSizes.forEach((pixelSize) => {
   });
 });
 
-export const AppIconExport: FC = () => {
+export const AppIcon2Export: FC = () => {
   const viewShotRef = useRef<ViewShot | null>(null);
 
   const [status, requestPermission] = MediaLibrary.usePermissions();
@@ -88,7 +88,7 @@ export const AppIconExport: FC = () => {
     >
       <ViewShot ref={viewShotRef}>
         <View>
-          <AppIcon
+          <AppIcon2
             colorScheme={iconVariation.colorScheme}
             object={iconVariation.object}
             pixelSize={iconVariation.pixelSize}
