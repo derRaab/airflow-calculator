@@ -54,6 +54,13 @@
             "assets/markdown/info/en.md"
           ]
         }
+      ],
+      [
+        "@sentry/react-native/expo",
+        {
+          "organization": "",
+          "project": ""
+        }
       ]
     ],
     "experiments": {
