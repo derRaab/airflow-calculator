@@ -1,5 +1,9 @@
 import { translate } from "@/src/localization";
-import { usePreferredColorScheme } from "@/src/themes/hooks";
+import {
+  usePreferredColorScheme,
+  usePreferredLayout,
+} from "@/src/themes/hooks";
+import { MaterialDesign3Layout } from "@/src/themes/layout";
 import { MaterialDesign3ColorScheme } from "@/src/themes/m3/MaterialDesign3ColorTheme";
 import { typography } from "@/src/themes/typography";
 import { createCachedFactory } from "@/src/utils/factoryUtils";
@@ -8,18 +12,66 @@ import { useAssets } from "expo-asset";
 import * as FileSystem from "expo-file-system";
 import { useNavigation } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
+import Markdown from "react-native-markdown-display";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+const markdownValues = [
+  {
+    key: "EXPO_PUBLIC_INFO_COMPANY_NAME",
+    value: process.env.EXPO_PUBLIC_INFO_COMPANY_NAME ?? "",
+  },
+  {
+    key: "EXPO_PUBLIC_INFO_COMPANY_CITY",
+    value: process.env.EXPO_PUBLIC_INFO_COMPANY_CITY ?? "",
+  },
+  {
+    key: "EXPO_PUBLIC_INFO_COMPANY_STREET",
+    value: process.env.EXPO_PUBLIC_INFO_COMPANY_STREET ?? "",
+  },
+  {
+    key: "EXPO_PUBLIC_INFO_COMPANY_PHONE",
+    value: process.env.EXPO_PUBLIC_INFO_COMPANY_PHONE ?? "",
+  },
+  {
+    key: "EXPO_PUBLIC_INFO_COMPANY_EMAIL",
+    value: process.env.EXPO_PUBLIC_INFO_COMPANY_EMAIL ?? "",
+  },
+  {
+    key: "EXPO_PUBLIC_INFO_COMPANY_BOSS",
+    value: process.env.EXPO_PUBLIC_INFO_COMPANY_BOSS ?? "",
+  },
+  {
+    key: "EXPO_PUBLIC_INFO_COMPANY_HRB",
+    value: process.env.EXPO_PUBLIC_INFO_COMPANY_HRB ?? "",
+  },
+];
+
+const replaceMarkdownValues = (markdown: string): string => {
+  if (!markdown) {
+    return "";
+  }
+
+  markdownValues.forEach(({ key, value }) => {
+    markdown = markdown.split(key).join(value);
+  });
+  return markdown;
+};
 
 export default function Index() {
   const colorScheme = usePreferredColorScheme();
+  const layout = usePreferredLayout();
+
   // NOTE: Header height contains safe area inset top!
   const headerHeight = useHeaderHeight();
   const safeAreaInsets = useSafeAreaInsets();
 
-  useNavigation().setOptions({
-    headerTintColor: colorScheme.onBackground,
-  });
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.setOptions({
+      headerTintColor: colorScheme.onBackground,
+    });
+  }, [navigation, colorScheme]);
 
   const [markdownContent, setMarkdownContent] = useState<string>("");
   const [assets] = useAssets([
@@ -36,13 +88,15 @@ export default function Index() {
       await asset.downloadAsync();
 
       const localUri = asset.localUri ?? "";
-      const content = await FileSystem.readAsStringAsync(localUri);
+      let content = await FileSystem.readAsStringAsync(localUri);
+      content = replaceMarkdownValues(content);
       setMarkdownContent(content);
     })();
   }, [assets]);
 
   const styles = useLocalStyle(
     colorScheme,
+    layout,
     headerHeight,
     safeAreaInsets.left,
     safeAreaInsets.right,
@@ -50,35 +104,43 @@ export default function Index() {
   );
 
   return (
-    <View style={styles.rootContainerStyle}>
-      <Text style={styles.textStyle}>{markdownContent}</Text>
-    </View>
+    <ScrollView contentContainerStyle={styles.scrollContainerStyle}>
+      <Markdown style={styles}>{markdownContent}</Markdown>
+    </ScrollView>
   );
 }
 
 const createStyleSheet = (
   colorScheme: MaterialDesign3ColorScheme,
+  layout: MaterialDesign3Layout,
   headerHeight: number,
   safeAreaInsetsLeft: number,
   safeAreaInsetsRight: number,
   safeAreaInsetsBottom: number,
 ) => {
+  const padding = layout.padding;
+
   return StyleSheet.create({
-    rootContainerStyle: {
-      alignItems: "center",
-      paddingTop: headerHeight,
-      paddingLeft: safeAreaInsetsLeft,
-      paddingRight: safeAreaInsetsRight,
-      paddingBottom: safeAreaInsetsBottom,
-      flex: 1,
-      gap: 10,
-      justifyContent: "center",
+    scrollContainerStyle: {
       backgroundColor: colorScheme.background,
+      minHeight: "100%",
+      paddingBottom: safeAreaInsetsBottom + padding,
+      paddingLeft: safeAreaInsetsLeft + padding,
+      paddingRight: safeAreaInsetsRight + padding,
+      paddingTop: headerHeight + padding,
     },
-    textStyle: {
+
+    body: {
       ...typography.bodyLarge,
       color: colorScheme.onBackground,
     },
+
+    heading1: typography.displayMedium,
+    heading2: { ...typography.displaySmall, marginTop: layout.spacing },
+    heading3: typography.headlineLarge,
+    heading4: typography.headlineMedium,
+    heading5: typography.headlineSmall,
+    heading6: typography.headlineSmall,
   });
 };
 
