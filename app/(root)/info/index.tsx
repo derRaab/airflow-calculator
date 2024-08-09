@@ -67,11 +67,9 @@ export default function Index() {
   const safeAreaInsets = useSafeAreaInsets();
 
   const navigation = useNavigation();
-  useEffect(() => {
-    navigation.setOptions({
-      headerTintColor: colorScheme.onBackground,
-    });
-  }, [navigation, colorScheme]);
+  navigation.setOptions({
+    headerTintColor: colorScheme.onBackground,
+  });
 
   const [markdownContent, setMarkdownContent] = useState<string>("");
   const [assets] = useAssets([
