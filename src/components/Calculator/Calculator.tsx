@@ -15,11 +15,13 @@ import React, {
 import {
   Keyboard,
   KeyboardAvoidingView,
+  ScaledSize,
   ScrollView,
   StatusBar,
   StyleSheet,
   TextInput,
   useColorScheme,
+  useWindowDimensions,
   View,
 } from "react-native";
 import { EdgeInsets } from "react-native-safe-area-context";
@@ -245,7 +247,9 @@ export const Calculator: FC<CalculatorProps> = ({
 
   const resultMinHeight = insets.top * 2;
 
-  const styles = useLocalStyle(colorScheme, layout);
+  const windowDimensions = useWindowDimensions();
+
+  const styles = useLocalStyle(colorScheme, layout, windowDimensions);
 
   return (
     <View style={styles.surfaceStyle}>
@@ -329,7 +333,11 @@ export const Calculator: FC<CalculatorProps> = ({
 const createStyleSheet = (
   colorScheme: MaterialDesign3ColorScheme,
   layout: MaterialDesign3Layout,
+  windowDimensions: ScaledSize,
 ) => {
+  const threeSize =
+    Math.min(windowDimensions.width, windowDimensions.height) / 3;
+
   return StyleSheet.create({
     keyboardAvoidingViewStyle: {
       backgroundColor: colorScheme.background,
@@ -349,8 +357,9 @@ const createStyleSheet = (
 
     threeObjectContainerStyle: {
       alignSelf: "center",
-      maxHeight: "20%",
-      padding: layout.padding,
+      maxHeight: threeSize,
+      maxWidth: threeSize,
+      padding: layout.spacing,
     },
   });
 };
