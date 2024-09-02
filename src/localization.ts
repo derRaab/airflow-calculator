@@ -91,7 +91,7 @@ const translations: Translations = {
     m_s: "m/s",
     m: "m",
     m2: "m²",
-    m3_h: "m³/h",
+    m3_h: "m³/hr",
     mm: "mm",
     mm2: "mm²",
     pipe: "Pipe",
