@@ -17,8 +17,8 @@ import { sentryInit, sentryWrap } from "@/src/utils/sentryUtils";
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
-// Sentry is enabled by default. To disable it, set `useSentry` to `false`.
-const useSentry = true;
+// Disable sentry in development mode
+const useSentry = __DEV__ ? false : true;
 const sentryInitStatus = sentryInit(useSentry);
 
 function RootLayout() {
