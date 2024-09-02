@@ -13,11 +13,14 @@ export default ({ config }: ConfigContext): ExpoConfig => {
   };
 
   // Read values from the environment
+  const appName = process.env.EXPO_SECRET_APP_NAME;
   const androidPackage = process.env.EXPO_SECRET_ANDROID_PACKAGE;
   const extraEasProjectId = process.env.EXPO_SECRET_EXTRA_EAS_PROJECT_ID;
   const iosBundleIdentifier = process.env.EXPO_SECRET_IOS_BUNDLE_IDENTIFIER;
   const owner = process.env.EXPO_SECRET_OWNER;
   const updatesUrl = process.env.EXPO_SECRET_UPDATES_URL;
+
+  newConfig.name = appName ?? newConfig.name;
 
   newConfig.android = newConfig.android ?? {};
   newConfig.android.package = androidPackage;
