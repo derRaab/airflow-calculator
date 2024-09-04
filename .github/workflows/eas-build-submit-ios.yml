@@ -30,5 +30,12 @@ jobs:
             sed -i 's/APPLE_TEAM_ID/${{ secrets.APPLE_TEAM_ID }}/g' eas.json
             sed -i 's/ASC_APP_ID/${{ secrets.ASC_APP_ID }}/g' eas.json
 
+      - name: Write .env.local
+        run: |
+          echo $ENV_LOCAL_FILE >> .env.local
+        shell: bash
+        env:
+          ENV_LOCAL_FILE : ${{secrets.ENV_LOCAL_FILE}}
+
       - name: Build on EAS and submit to App Store Connect
         run: eas build --platform ios --profile production --non-interactive --no-wait --auto-submit
