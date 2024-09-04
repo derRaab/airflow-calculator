@@ -40,6 +40,14 @@
       },
       "ios": {
         "image": "latest"
+      },
+      "env": {
+        "EXPO_SECRET_ANDROID_PACKAGE": "__EXPO_SECRET_ANDROID_PACKAGE__",
+        "EXPO_SECRET_APP_NAME": "__EXPO_SECRET_APP_NAME__",
+        "EXPO_SECRET_EXTRA_EAS_PROJECT_ID": "__EXPO_SECRET_EXTRA_EAS_PROJECT_ID__",
+        "EXPO_SECRET_IOS_BUNDLE_IDENTIFIER": "__EXPO_SECRET_IOS_BUNDLE_IDENTIFIER__",
+        "EXPO_SECRET_OWNER": "__EXPO_SECRET_OWNER__",
+        "EXPO_SECRET_UPDATES_URL": "__EXPO_SECRET_UPDATES_URL__"
       }
     }
   },

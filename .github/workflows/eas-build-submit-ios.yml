@@ -29,7 +29,13 @@ jobs:
             sed -i 's/__APPLE_ID__/${{ secrets.APPLE_ID }}/g' eas.json
             sed -i 's/__APPLE_TEAM_ID__/${{ secrets.APPLE_TEAM_ID }}/g' eas.json
             sed -i 's/__ASC_APP_ID__/${{ secrets.ASC_APP_ID }}/g' eas.json
-
+            sed -i 's/__EXPO_SECRET_ANDROID_PACKAGE__/${{ secrets.EXPO_SECRET_ANDROID_PACKAGE }}/g' eas.json
+            sed -i 's/__EXPO_SECRET_APP_NAME__/${{ secrets.EXPO_SECRET_APP_NAME }}/g' eas.json
+            sed -i 's/__EXPO_SECRET_EXTRA_EAS_PROJECT_ID__/${{ secrets.EXPO_SECRET_EXTRA_EAS_PROJECT_ID }}/g' eas.json
+            sed -i 's/__EXPO_SECRET_IOS_BUNDLE_IDENTIFIER__/${{ secrets.EXPO_SECRET_IOS_BUNDLE_IDENTIFIER }}/g' eas.json
+            sed -i 's/__EXPO_SECRET_OWNER__/${{ secrets.EXPO_SECRET_OWNER }}/g' eas.json
+            sed -i 's/__EXPO_SECRET_UPDATES_URL__/${{ secrets.EXPO_SECRET_UPDATES_URL }}/g' eas.json
+            
       - name: Write .env.local
         run: |
           echo $ENV_LOCAL_FILE >> .env.local
