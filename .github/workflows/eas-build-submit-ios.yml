@@ -37,12 +37,5 @@ jobs:
             sed -i 's/__EXPO_SECRET_OWNER__/${{ secrets.EXPO_SECRET_OWNER }}/g' eas.json
             sed -i 's/__EXPO_SECRET_UPDATES_URL__/${{ secrets.EXPO_SECRET_UPDATES_URL }}/g' eas.json
 
-      - name: Write .env.local
-        run: |
-          echo $ENV_LOCAL_FILE >> .env.local
-        shell: bash
-        env:
-          ENV_LOCAL_FILE : ${{secrets.ENV_LOCAL_FILE}}
-
       - name: Build on EAS and submit to App Store Connect
         run: eas build --platform ios --profile production --non-interactive --no-wait --auto-submit
