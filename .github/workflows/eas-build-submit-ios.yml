@@ -46,5 +46,5 @@ jobs:
             sed -i "s/__EXPO_SECRET_OWNER__/$escaped_owner/g" eas.json
             sed -i "s/__EXPO_SECRET_UPDATES_URL__/$escaped_updates_url/g" eas.json
 
-      - name: Build on EAS and submit to App Store Connect
-        run: eas build --platform ios --profile production --non-interactive --no-wait --auto-submit
+      - name: Build on EAS and submit to App Store Connect > /dev/null
+        run: eas build --platform ios --profile production --non-interactive --no-wait --auto-submit > /dev/null
