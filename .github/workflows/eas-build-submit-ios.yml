@@ -27,15 +27,24 @@ jobs:
       - name: Escape and replace secrets in eas.json
         run: |
             escaped_apple_id=$(printf '%s\n' "${{ secrets.APPLE_ID }}" | sed 's/[\/&]/\\&/g')
+            escaped_apple_team_id=$(printf '%s\n' "${{ secrets.APPLE_TEAM_ID }}" | sed 's/[\/&]/\\&/g')
+            escaped_asc_app_id=$(printf '%s\n' "${{ secrets.ASC_APP_ID }}" | sed 's/[\/&]/\\&/g')
+            escaped_android_package=$(printf '%s\n' "${{ secrets.EXPO_SECRET_ANDROID_PACKAGE }}" | sed 's/[\/&]/\\&/g')
+            escaped_app_name=$(printf '%s\n' "${{ secrets.EXPO_SECRET_APP_NAME }}" | sed 's/[\/&]/\\&/g')
+            escaped_eas_project_id=$(printf '%s\n' "${{ secrets.EXPO_SECRET_EXTRA_EAS_PROJECT_ID }}" | sed 's/[\/&]/\\&/g')
+            escaped_ios_bundle_identifier=$(printf '%s\n' "${{ secrets.EXPO_SECRET_IOS_BUNDLE_IDENTIFIER }}" | sed 's/[\/&]/\\&/g')
+            escaped_owner=$(printf '%s\n' "${{ secrets.EXPO_SECRET_OWNER }}" | sed 's/[\/&]/\\&/g')
+            escaped_updates_url=$(printf '%s\n' "${{ secrets.EXPO_SECRET_UPDATES_URL }}" | sed 's/[\/&]/\\&/g')
+
             sed -i "s/__APPLE_ID__/$escaped_apple_id/g" eas.json
-            sed -i 's/__APPLE_TEAM_ID__/${{ secrets.APPLE_TEAM_ID }}/g' eas.json
-            sed -i 's/__ASC_APP_ID__/${{ secrets.ASC_APP_ID }}/g' eas.json
-            sed -i 's/__EXPO_SECRET_ANDROID_PACKAGE__/${{ secrets.EXPO_SECRET_ANDROID_PACKAGE }}/g' eas.json
-            sed -i 's/__EXPO_SECRET_APP_NAME__/${{ secrets.EXPO_SECRET_APP_NAME }}/g' eas.json
-            sed -i 's/__EXPO_SECRET_EXTRA_EAS_PROJECT_ID__/${{ secrets.EXPO_SECRET_EXTRA_EAS_PROJECT_ID }}/g' eas.json
-            sed -i 's/__EXPO_SECRET_IOS_BUNDLE_IDENTIFIER__/${{ secrets.EXPO_SECRET_IOS_BUNDLE_IDENTIFIER }}/g' eas.json
-            sed -i 's/__EXPO_SECRET_OWNER__/${{ secrets.EXPO_SECRET_OWNER }}/g' eas.json
-            sed -i 's/__EXPO_SECRET_UPDATES_URL__/${{ secrets.EXPO_SECRET_UPDATES_URL }}/g' eas.json
+            sed -i "s/__APPLE_TEAM_ID__/$escaped_apple_team_id/g" eas.json
+            sed -i "s/__ASC_APP_ID__/$escaped_asc_app_id/g" eas.json
+            sed -i "s/__EXPO_SECRET_ANDROID_PACKAGE__/$escaped_android_package/g" eas.json
+            sed -i "s/__EXPO_SECRET_APP_NAME__/$escaped_app_name/g" eas.json
+            sed -i "s/__EXPO_SECRET_EXTRA_EAS_PROJECT_ID__/$escaped_eas_project_id/g" eas.json
+            sed -i "s/__EXPO_SECRET_IOS_BUNDLE_IDENTIFIER__/$escaped_ios_bundle_identifier/g" eas.json
+            sed -i "s/__EXPO_SECRET_OWNER__/$escaped_owner/g" eas.json
+            sed -i "s/__EXPO_SECRET_UPDATES_URL__/$escaped_updates_url/g" eas.json
 
       - name: Build on EAS and submit to App Store Connect
         run: eas build --platform ios --profile production --non-interactive --no-wait --auto-submit
