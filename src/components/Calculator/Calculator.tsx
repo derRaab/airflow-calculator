@@ -251,6 +251,18 @@ export const Calculator: FC<CalculatorProps> = ({
 
   const styles = useLocalStyle(colorScheme, layout, windowDimensions);
 
+  useEffect(() => {
+    // Focus first text input on mount
+    const c = textInputRefList.length;
+    for (let i = 0; i < c; i++) {
+      const textInput = textInputRefList[i].current;
+      if (textInput) {
+        textInput.focus();
+        return;
+      }
+    }
+  }, []);
+
   return (
     <View style={styles.surfaceStyle}>
       <StatusBar
