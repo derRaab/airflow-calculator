@@ -5,9 +5,10 @@ import { MaterialDesign3Layout } from "@/src/themes/layout";
 import { MaterialDesign3ColorScheme } from "@/src/themes/m3/MaterialDesign3ColorTheme";
 import { typography } from "@/src/themes/typography";
 import { createCachedFactory } from "@/src/utils/factoryUtils";
+import { lineHeightPadding } from "@/src/utils/textStyleUtils";
 import { Link } from "expo-router";
 import React, { FC } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextStyle, View } from "react-native";
 import Animate, { SharedValue } from "react-native-reanimated";
 
 const AnimatedLink = Animate.createAnimatedComponent(Link);
@@ -38,8 +39,12 @@ export const CalculationSelectorButton: FC<CalculationSelectorButtonProps> = ({
     >
       <Pressable style={styles.linkStyle}>
         <View style={styles.linkInnerStyle}>
-          <View style={styles.symbolStyle}>
-            <Text style={styles.symbolTextStyle}>{symbol(type)}</Text>
+          <View style={styles.symbolMarginStyle}>
+            <View style={styles.symbolStyle}>
+              <View style={styles.symbolInnerStyle}>
+                <Text style={styles.symbolTextStyle}>{symbol(type)}</Text>
+              </View>
+            </View>
           </View>
           <View style={styles.labelStyle}>
             <Text style={styles.labelTextStyle}>{translate(type)}</Text>
@@ -56,31 +61,51 @@ const createStyleSheet = (
   layout: MaterialDesign3Layout,
   object: CalculationObject,
 ) => {
-  const symbolSize = (typography.headlineSmall.fontSize as number) * 1.8;
+  const labelTextStyle: TextStyle = typography.headlineSmall;
+  const objectTextStyle: TextStyle = typography.labelMedium;
+  const labelLineHeightPadding = lineHeightPadding(labelTextStyle);
+  const objectLineHeightPadding = lineHeightPadding(objectTextStyle);
+
+  let symbolSize = Math.round((labelTextStyle.fontSize as number) * 1.8);
+  let symbolMargin = 0;
+  if (object === "duct") {
+    symbolSize -= 4;
+    symbolMargin = 2;
+  }
 
   return StyleSheet.create({
     labelTextStyle: {
-      ...typography.headlineSmall,
+      ...labelTextStyle,
 
       color: colorScheme.onPrimary,
+      marginTop: -labelLineHeightPadding,
     },
 
     symbolTextStyle: {
-      ...typography.headlineSmall,
+      ...labelTextStyle,
 
-      color: colorScheme.onPrimary,
+      color: colorScheme.primary,
     },
 
+    symbolMarginStyle: { marginVertical: symbolMargin },
+
     symbolStyle: {
+      backgroundColor: colorScheme.onPrimary,
+      borderRadius: object === "pipe" ? symbolSize / 2 : 0,
+      height: symbolSize,
+      padding: 1,
+      width: symbolSize,
+    },
+
+    symbolInnerStyle: {
       alignItems: "center",
-      borderColor: colorScheme.onPrimary,
+      borderColor: colorScheme.primary,
       borderRadius: object === "pipe" ? symbolSize / 2 : 0,
       borderStyle: "solid",
       borderWidth: 1,
-      height: (typography.headlineSmall.fontSize as number) * 1.8,
+      height: "100%",
       justifyContent: "center",
-      paddingTop: 2,
-      width: symbolSize,
+      width: "100%",
     },
 
     linkStyle: {
@@ -99,12 +124,14 @@ const createStyleSheet = (
 
     labelStyle: {
       flexGrow: 1,
+      paddingRight: 8,
     },
 
     objectTitleTextStyle: {
-      ...typography.labelMedium,
+      ...objectTextStyle,
 
       color: colorScheme.onPrimary,
+      marginTop: -objectLineHeightPadding,
     },
   });
 };
