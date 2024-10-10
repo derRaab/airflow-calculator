@@ -5,6 +5,7 @@ import { MaterialDesign3Layout } from "@/src/themes/layout";
 import { MaterialDesign3ColorScheme } from "@/src/themes/m3/MaterialDesign3ColorTheme";
 import { createCachedFactory } from "@/src/utils/factoryUtils";
 import * as Device from "expo-device";
+import { useNavigation } from "expo-router";
 import React, {
   FC,
   MutableRefObject,
@@ -251,16 +252,26 @@ export const Calculator: FC<CalculatorProps> = ({
 
   const styles = useLocalStyle(colorScheme, layout, windowDimensions);
 
+  const navigation = useNavigation();
+
   useEffect(() => {
-    // Focus first text input on mount
-    const c = textInputRefList.length;
-    for (let i = 0; i < c; i++) {
-      const textInput = textInputRefList[i].current;
-      if (textInput) {
-        textInput.focus();
-        return;
-      }
-    }
+    // Focus first text input after the transition (fade-in) is complete
+    const unsubscribe = navigation.addListener(
+      "transitionEnd" as any,
+      (e: any) => {
+        if (!e?.data?.closing) {
+          const c = textInputRefList.length;
+          for (let i = 0; i < c; i++) {
+            const textInput = textInputRefList[i].current;
+            if (textInput) {
+              textInput.focus();
+              return;
+            }
+          }
+        }
+      },
+    );
+    return unsubscribe;
   }, []);
 
   return (
