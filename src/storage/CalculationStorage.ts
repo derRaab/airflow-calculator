@@ -12,6 +12,8 @@ import {
 } from "../calculation";
 
 export class CalculationStorage {
+  private useAsyncStorage = false;
+
   private calculationsChangeMap: Map<string, boolean> = new Map();
   private calculationsMap: Map<string, Calculation> = new Map();
   private calculationsUpdatesMap: Map<string, Calculation[]> = new Map();
@@ -51,6 +53,11 @@ export class CalculationStorage {
     this.calculationsChangeMap.set(key, true);
     // Immidiately update in map
     this.calculationsMap.set(key, calculation);
+
+    if (!this.useAsyncStorage) {
+      return;
+    }
+
     // Add to updates
     this.calculationsUpdatesMap.get(key)?.push(calculation);
     // Start writing to disc
@@ -58,6 +65,11 @@ export class CalculationStorage {
   }
   initialize = async (): Promise<boolean> => {
     return new Promise<boolean>(async (resolve, _reject) => {
+      if (!this.useAsyncStorage) {
+        resolve(false);
+        return;
+      }
+
       try {
         this.writingBlocked = true;
         const calculationKeys = Array.from(this.calculationsMap.keys());
