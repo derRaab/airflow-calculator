@@ -10,6 +10,18 @@ export interface CalculationUnits {
 }
 
 export type CalculationUnit = keyof CalculationUnits;
+const isValidCalculationUnit = (calculationUnit: CalculationUnit) => {
+  return (
+    calculationUnit === "m3_h" ||
+    calculationUnit === "m_s" ||
+    calculationUnit === "mm" ||
+    calculationUnit === "cm" ||
+    calculationUnit === "dm" ||
+    calculationUnit === "m" ||
+    calculationUnit === "mm2" ||
+    calculationUnit === "m2"
+  );
+};
 
 export type CalculationObject = "duct" | "pipe";
 export type CalculationType = "velocity" | "flowrate";
@@ -69,6 +81,28 @@ export const defaultCalculationPipeVelocity: Calculation = {
   object: "pipe",
   result: { value: 0, unit: "m_s" },
   type: "velocity",
+};
+
+export const isValidCalculation = (calculation: Calculation) => {
+  return (
+    isValidCalculationValue(calculation.area) &&
+    isValidCalculationValue(calculation.diameter) &&
+    isValidCalculationValue(calculation.flowrate) &&
+    isValidCalculationValue(calculation.height) &&
+    (calculation.object === "pipe" || calculation.object === "duct") &&
+    isValidCalculationValue(calculation.result) &&
+    (calculation.type === "flowrate" || calculation.type === "velocity") &&
+    isValidCalculationValue(calculation.width) &&
+    isValidCalculationValue(calculation.velocity)
+  );
+};
+
+const isValidCalculationValue = (calculationValue: CalculationValue) => {
+  return (
+    typeof calculationValue === "object" &&
+    typeof calculationValue.unit === "string" &&
+    isValidCalculationUnit(calculationValue.unit)
+  );
 };
 
 export const calculateDuctFlowrate = (calculation: Calculation) => {

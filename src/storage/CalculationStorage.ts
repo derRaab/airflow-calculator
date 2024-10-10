@@ -8,6 +8,7 @@ import {
   defaultCalculationDuctVelocity,
   defaultCalculationPipeFlowrate,
   defaultCalculationPipeVelocity,
+  isValidCalculation,
 } from "../calculation";
 
 export class CalculationStorage {
@@ -65,8 +66,13 @@ export class CalculationStorage {
           const jsonString = await AsyncStorage.getItem(calculationKey);
           if (jsonString) {
             const calculation = JSON.parse(jsonString) as Calculation;
+            if (!isValidCalculation(calculation)) {
+              console.log(
+                `Skip invalid loaded calculation ${calculationKey}`,
+                calculation,
+              );
+            }
             this.calculationsMap.set(calculationKey, calculation);
-            console.log(`Loaded calculation ${calculationKey}`, calculation);
           }
         }
       } catch (error) {

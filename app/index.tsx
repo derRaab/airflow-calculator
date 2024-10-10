@@ -98,9 +98,9 @@ export default function Index() {
   // Prepare stored calculation context
   const calculationStorage = useContext(CalculationStorageContext);
   const { isPending } = useQuery({
-    queryKey: ["prepareCalculations"],
+    queryKey: ["calculationStorageInitialize"],
     queryFn: () => {
-      return calculationStorage.read();
+      return calculationStorage.initialize();
     },
   });
   if (isPending) {
