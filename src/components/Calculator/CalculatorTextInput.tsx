@@ -120,18 +120,19 @@ export const CalculatorTextInput: FC<CalculatorTextInputProps> = ({
       <Text style={descriptionStyle}>{description}</Text>
       <View style={inputContainerStyle}>
         <TextInput
-          ref={textInputRef}
           keyboardType="numeric"
           onChangeText={onChangeText}
-          placeholder={placeholder}
-          placeholderTextColor={colorScheme.onSurface + "66"}
-          style={textInputStyle}
-          value={displayValue}
           onFocus={(e) => {
             if (typeof onTextInputFocus === "function") {
               onTextInputFocus(e);
             }
           }}
+          placeholder={placeholder}
+          placeholderTextColor={colorScheme.onSurface + "66"}
+          ref={textInputRef}
+          selectTextOnFocus={true}
+          style={textInputStyle}
+          value={displayValue}
         ></TextInput>
         <Text style={unitStyle}>{unit}</Text>
       </View>
