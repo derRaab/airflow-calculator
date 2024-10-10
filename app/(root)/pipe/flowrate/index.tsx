@@ -31,6 +31,7 @@ export default function Index() {
   const onCalculatorInputChange = (calculation: Calculation) => {
     const newCalculation = calculatePipeFlowrate(calculation);
     setCalculation(newCalculation);
+    calculationStorage.set(newCalculation);
   };
 
   return (
