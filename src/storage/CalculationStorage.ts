@@ -56,10 +56,25 @@ export class CalculationStorage {
     this.writeNext();
   }
   initialize = async (): Promise<boolean> => {
-    return new Promise<boolean>((resolve, reject) => {
-      setTimeout(() => {
+    return new Promise<boolean>(async (resolve, _reject) => {
+      try {
+        this.writingBlocked = true;
+        const calculationKeys = Array.from(this.calculationsMap.keys());
+        for (let i = 0; i < calculationKeys.length; i++) {
+          const calculationKey = calculationKeys[i];
+          const jsonString = await AsyncStorage.getItem(calculationKey);
+          if (jsonString) {
+            const calculation = JSON.parse(jsonString) as Calculation;
+            this.calculationsMap.set(calculationKey, calculation);
+            console.log(`Loaded calculation ${calculationKey}`, calculation);
+          }
+        }
+      } catch (error) {
+        console.error("Error initializing calculation storage", error);
+      } finally {
+        this.writingBlocked = false;
         resolve(true);
-      }, 1000);
+      }
     });
   };
 
