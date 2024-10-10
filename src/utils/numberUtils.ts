@@ -9,7 +9,7 @@ export const valueToLocaleString = (
   minFractionDigits = 0,
   maxFractionDigits = 20,
 ) => {
-  if (resultValue === undefined) {
+  if (resultValue === undefined || resultValue === null) {
     return "-";
   }
 
