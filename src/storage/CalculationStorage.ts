@@ -15,7 +15,7 @@ export class CalculationStorage {
   private calculationsMap: Map<string, Calculation> = new Map();
   private calculationsUpdatesMap: Map<string, Calculation[]> = new Map();
   private prepared = false;
-  private writing = false;
+  private writingBlocked = false;
 
   constructor() {
     // Initialize with ALL default calculations
@@ -55,18 +55,16 @@ export class CalculationStorage {
     // Start writing to disc
     this.writeNext();
   }
-  read = async (): Promise<boolean> => {
-    console.log("Reading calculations");
+  initialize = async (): Promise<boolean> => {
     return new Promise<boolean>((resolve, reject) => {
       setTimeout(() => {
-        console.log("Read calculations");
         resolve(true);
       }, 1000);
     });
   };
 
   writeNext = async (): Promise<void> => {
-    if (this.writing) {
+    if (this.writingBlocked) {
       return;
     }
 
@@ -96,17 +94,14 @@ export class CalculationStorage {
         continue;
       }
 
-      this.writing = true;
+      this.writingBlocked = true;
       try {
         const jsonString = JSON.stringify(calculation);
-
-        console.log(`Writing calculations for ${mapKey}`, jsonString);
         await AsyncStorage.setItem(calulationKey, jsonString);
       } catch (error) {
-        console.error(`Error writing calculations for ${mapKey}`);
-        console.error(error);
+        console.error(`Error writing calculations for ${mapKey}`, error);
       } finally {
-        this.writing = false;
+        this.writingBlocked = false;
         this.writeNext();
       }
     }
