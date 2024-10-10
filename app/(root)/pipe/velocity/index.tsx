@@ -1,12 +1,9 @@
-import {
-  Calculation,
-  calculatePipeVelocity,
-  defaultCalculation,
-} from "@/src/calculation";
+import { CalculationStorageContext } from "@/app/_layout";
+import { Calculation, calculatePipeVelocity } from "@/src/calculation";
 import { Calculator } from "@/src/components/Calculator/Calculator";
 import { usePreferredLayout } from "@/src/themes/hooks";
 import { useHeaderHeight } from "@react-navigation/elements";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -25,12 +22,10 @@ export default function Index() {
   };
 
   // Calculation state
-  const [calculation, setCalculation] = useState<Calculation>({
-    ...defaultCalculation,
-
-    object: "pipe",
-    type: "velocity",
-  });
+  const calculationStorage = useContext(CalculationStorageContext);
+  const [calculation, setCalculation] = useState<Calculation>(
+    calculationStorage.get("pipe", "velocity"),
+  );
 
   // Handle calculator input change
   const onCalculatorInputChange = (calculation: Calculation) => {

@@ -7,8 +7,9 @@ import { MaterialDesign3Layout } from "@/src/themes/layout";
 import { MaterialDesign3ColorScheme } from "@/src/themes/m3/MaterialDesign3ColorTheme";
 import { typography } from "@/src/themes/typography";
 import { createCachedFactory } from "@/src/utils/factoryUtils";
+import { useQuery } from "@tanstack/react-query";
 import { Link, SplashScreen } from "expo-router";
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import { AccessibilityInfo, StyleSheet, View } from "react-native";
 import {
   Easing,
@@ -19,6 +20,7 @@ import {
   WithTimingConfig,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { CalculationStorageContext } from "./_layout";
 
 export default function Index() {
   const colorScheme = usePreferredColorScheme();
@@ -70,9 +72,16 @@ export default function Index() {
 
   const hasRenderedDuct = useRef(false);
   const hasRenderedPipe = useRef(false);
+  const hasPreparedCalculations = useRef(false);
 
   const hideSplashScreen = () => {
-    if (!hasRenderedDuct.current || !hasRenderedPipe.current) return;
+    if (
+      !hasPreparedCalculations.current ||
+      !hasRenderedDuct.current ||
+      !hasRenderedPipe.current
+    ) {
+      return;
+    }
     SplashScreen.hideAsync();
     startOpacityAnimation();
   };
@@ -85,6 +94,22 @@ export default function Index() {
     hasRenderedPipe.current = true;
     hideSplashScreen();
   };
+
+  // Prepare stored calculation context
+  const calculationStorage = useContext(CalculationStorageContext);
+  const { isPending } = useQuery({
+    queryKey: ["prepareCalculations"],
+    queryFn: () => {
+      return calculationStorage.read();
+    },
+  });
+  if (isPending) {
+    return null;
+  }
+  if (!hasPreparedCalculations.current) {
+    hasPreparedCalculations.current = true;
+    hideSplashScreen();
+  }
 
   return (
     <View style={styles.containerStyle}>

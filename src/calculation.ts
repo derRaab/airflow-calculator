@@ -31,16 +31,44 @@ export interface Calculation {
   width: CalculationValue;
 }
 
-export const defaultCalculation: Calculation = {
+const defaultCalculation: Calculation = {
   area: { value: 0, unit: "m2" },
   diameter: { value: 0, unit: "mm" },
   flowrate: { value: 0, unit: "m3_h" },
   height: { value: 0, unit: "mm" },
-  object: "",
+  object: "duct",
   result: { value: 0, unit: "m_s" },
   type: "velocity",
   width: { value: 0, unit: "mm" },
   velocity: { value: 0, unit: "m_s" },
+};
+
+export const defaultCalculationDuctFlowrate: Calculation = {
+  ...defaultCalculation,
+  object: "duct",
+  result: { value: 0, unit: "m3_h" },
+  type: "flowrate",
+};
+
+export const defaultCalculationDuctVelocity: Calculation = {
+  ...defaultCalculation,
+  object: "duct",
+  result: { value: 0, unit: "m_s" },
+  type: "velocity",
+};
+
+export const defaultCalculationPipeFlowrate: Calculation = {
+  ...defaultCalculation,
+  object: "pipe",
+  result: { value: 0, unit: "m3_h" },
+  type: "flowrate",
+};
+
+export const defaultCalculationPipeVelocity: Calculation = {
+  ...defaultCalculation,
+  object: "pipe",
+  result: { value: 0, unit: "m_s" },
+  type: "velocity",
 };
 
 export const calculateDuctFlowrate = (calculation: Calculation) => {
