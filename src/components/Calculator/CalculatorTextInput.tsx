@@ -5,6 +5,7 @@ import { lineHeightPadding } from "@/src/utils/textStyleUtils";
 import { FC, MutableRefObject, useState } from "react";
 import {
   NativeSyntheticEvent,
+  Platform,
   Pressable,
   StyleProp,
   Text,
@@ -25,6 +26,8 @@ interface CalculatorTextInputProps {
   value: number;
   onTextInputFocus: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
 }
+
+const IS_ANDROID = Platform.OS === "android";
 
 export const CalculatorTextInput: FC<CalculatorTextInputProps> = ({
   description,
@@ -110,6 +113,22 @@ export const CalculatorTextInput: FC<CalculatorTextInputProps> = ({
   unitStyle.paddingBottom =
     lineHeightPadding(textInputStyle) - lineHeightPadding(unitStyle);
 
+  // The minimum width of an TextInput on Android is the width the placeholder needs.
+  // So on Android we need to update the placeholder to keep the units next to the input value.
+  const getRenderedPlaceholder = () => {
+    return IS_ANDROID && displayValue !== "" ? "" : placeholder;
+  };
+  const [renderedPlaceholder, setRenderedPlaceholder] = useState(
+    getRenderedPlaceholder(),
+  );
+  const updateRenderedPlaceholder = () => {
+    const newPlaceholder = getRenderedPlaceholder();
+    if (renderedPlaceholder !== newPlaceholder) {
+      setRenderedPlaceholder(newPlaceholder);
+    }
+  };
+  updateRenderedPlaceholder();
+
   return (
     <Pressable
       style={containerStyle}
@@ -121,14 +140,19 @@ export const CalculatorTextInput: FC<CalculatorTextInputProps> = ({
       <View style={inputContainerStyle}>
         <TextInput
           keyboardType="numeric"
+          onBlur={(e) => {
+            updateRenderedPlaceholder();
+          }}
           onChangeText={onChangeText}
           onFocus={(e) => {
+            updateRenderedPlaceholder();
             if (typeof onTextInputFocus === "function") {
               onTextInputFocus(e);
             }
           }}
-          placeholder={placeholder}
+          placeholder={renderedPlaceholder}
           placeholderTextColor={colorScheme.onSurface + "66"}
+          placeholderStyle={{ color: "white" }}
           ref={textInputRef}
           selectTextOnFocus={true}
           style={textInputStyle}
