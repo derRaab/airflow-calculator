@@ -158,6 +158,7 @@ export const CalculatorTextInput: FC<CalculatorTextInputProps> = ({
           placeholderTextColor={colorScheme.onSurface + "66"}
           placeholderStyle={{ color: "white" }}
           ref={textInputRef}
+          selectionColor={colorScheme.primary + "66"}
           selectTextOnFocus={true}
           style={textInputStyle}
           value={displayValue}
