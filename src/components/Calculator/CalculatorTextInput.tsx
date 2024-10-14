@@ -98,6 +98,10 @@ export const CalculatorTextInput: FC<CalculatorTextInputProps> = ({
     while (integerString.startsWith("00")) {
       integerString = integerString.substring(1);
     }
+    if (integerString.startsWith("0") && 1 < integerString.length) {
+      integerString = integerString.substring(1);
+    }
+
     // Create the validated text
     let valueString = integerString;
     if (1 < valuePartStrings.length) {
