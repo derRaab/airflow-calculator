@@ -5,7 +5,7 @@ import * as Device from "expo-device";
 import React, { FC, useCallback, useEffect, useRef } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, { SharedValue } from "react-native-reanimated";
-import { ThreeObject } from "../Three/ThreeObject";
+import { ThreeObjectCached } from "../Three/ThreeObjectCached";
 import { CalculationSelectorButton } from "./CalculationSelectorButton";
 
 interface CalculationSelectorProps {
@@ -62,7 +62,7 @@ export const CalculationSelector: FC<CalculationSelectorProps> = ({
     >
       <Animated.View style={styles.threeObjectContainerStyle}>
         {Device.isDevice && (
-          <ThreeObject
+          <ThreeObjectCached
             colorScheme={colorScheme}
             object={object}
             onFirstFrame={() => onThreeObjectFirstFrame()}
