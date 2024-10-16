@@ -92,7 +92,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     aspectRatio: aspectRatio,
-    opacity: 0.1,
   },
 });
 const rotationBase = { x: 15, y: -15, z: 0 };
@@ -114,7 +113,7 @@ const convertRotation = ({
     THREE.MathUtils.degToRad(rotationBase.z + alpha * zFactor),
   );
 
-interface ThreeObjectProps {
+export interface ThreeObjectProps {
   colorScheme: MaterialDesign3ColorScheme;
   object: CalculationObject | "both";
   onFirstFrame?: () => void;
