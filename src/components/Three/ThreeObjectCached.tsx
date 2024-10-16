@@ -137,7 +137,7 @@ export const ThreeObjectCached: FC<ThreeObjectProps> = ({
     invokeOnFirstFrame();
 
     return (
-      <View style={{ width: 300, height: 300 }}>
+      <View style={{ width: 300, height: 300, opacity: 0.1 }}>
         <Image
           style={{ width: 300, height: 300 }}
           onError={(e) => {
