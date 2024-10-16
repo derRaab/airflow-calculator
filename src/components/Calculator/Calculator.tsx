@@ -26,7 +26,7 @@ import {
   View,
 } from "react-native";
 import { EdgeInsets } from "react-native-safe-area-context";
-import { ThreeObject } from "../Three/ThreeObject";
+import { ThreeObjectCached } from "../Three/ThreeObjectCached";
 import { CalculatorDuctAreaInput, DuctArea } from "./CalculatorDuctAreaInput";
 import { CalculatorFlowrateInput } from "./CalculatorFlowrateInput";
 import {
@@ -336,7 +336,7 @@ export const Calculator: FC<CalculatorProps> = ({
           )}
           <View style={styles.threeObjectContainerStyle}>
             {Device.isDevice && (
-              <ThreeObject
+              <ThreeObjectCached
                 colorScheme={colorScheme}
                 object={calculation.object}
               />
