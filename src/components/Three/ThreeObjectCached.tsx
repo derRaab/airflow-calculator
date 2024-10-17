@@ -1,7 +1,6 @@
 import { MaterialDesign3ColorScheme } from "@/src/themes/m3/MaterialDesign3ColorTheme";
 import * as FileSystem from "expo-file-system";
 import { Image } from "expo-image";
-import * as MediaLibrary from "expo-media-library";
 import { FC, useEffect, useRef, useState } from "react";
 import {
   Platform,
@@ -104,7 +103,6 @@ export const ThreeObjectCached: FC<ThreeObjectProps> = ({
       const uri = await captureRef(viewShotRef);
       await makeCacheDirectory();
       await FileSystem.copyAsync({ from: uri, to: cacheUri });
-      await MediaLibrary.saveToLibraryAsync(cacheUri);
       setExistingCacheUri(cacheUri);
 
       console.log("Created the cache file", cacheUri);
