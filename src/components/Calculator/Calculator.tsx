@@ -16,6 +16,7 @@ import React, {
 import {
   Keyboard,
   KeyboardAvoidingView,
+  Platform,
   ScaledSize,
   ScrollView,
   StatusBar,
@@ -37,6 +38,10 @@ import {
 import { CalculatorPipeAreaInput, PipeArea } from "./CalculatorPipeAreaInput";
 import { CalculatorResult } from "./CalculatorResult";
 import { CalculatorVelocityInput } from "./CalculatorVelocityInput";
+
+// Pick better behaviour on each platform: height on android, padding on ios
+const KEYBOARD_AVOIDING_VIEW_BEHAVIOR =
+  Platform.OS === "android" ? "height" : "padding";
 
 interface CalculatorProps {
   calculation: Calculation;
@@ -287,7 +292,7 @@ export const Calculator: FC<CalculatorProps> = ({
         minHeight={resultMinHeight}
       />
       <KeyboardAvoidingView
-        behavior="padding"
+        behavior={KEYBOARD_AVOIDING_VIEW_BEHAVIOR}
         style={styles.keyboardAvoidingViewStyle}
       >
         <ScrollView contentContainerStyle={styles.scrollViewStyle}>
