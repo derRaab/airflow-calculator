@@ -106,11 +106,13 @@ const createStyleSheet = (
     threeObjectContainerStyle: {
       alignItems: "center",
       flexShrink: 1,
+      height: "100%",
       justifyContent: "center",
       maxHeight: "100%",
       maxWidth: "100%",
       padding: layout.spacing,
       position: "absolute",
+      width: "100%",
     },
 
     buttonContainerStyle: {
