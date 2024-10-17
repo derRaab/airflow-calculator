@@ -380,9 +380,11 @@ const createStyleSheet = (
 
     threeObjectContainerStyle: {
       alignSelf: "center",
+      height: "100%",
       maxHeight: threeSize,
       maxWidth: threeSize,
       padding: layout.spacing,
+      width: "100%",
     },
   });
 };
