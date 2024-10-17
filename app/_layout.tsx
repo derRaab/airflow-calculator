@@ -1,9 +1,5 @@
 import { usePreferredColorScheme } from "@/src/themes/hooks";
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
+import { ThemeProvider } from "@react-navigation/native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SplashScreen, Stack, useNavigationContainerRef } from "expo-router";
 import { THREE } from "expo-three";
@@ -13,6 +9,8 @@ import { useColorScheme } from "react-native";
 import { sentryInit, sentryWrap } from "@/src/utils/sentryUtils";
 
 import { CalculationStorage } from "@/src/storage/CalculationStorage";
+import { getReactNavigationTheme } from "@/src/utils/m3Utils";
+import * as SystemUI from "expo-system-ui";
 import { createContext } from "react";
 
 // This is needed to make THREE global
@@ -45,13 +43,18 @@ function RootLayout() {
 
   const colorSchemeName = useColorScheme();
   const colorScheme = usePreferredColorScheme();
+  const reactNavigationTheme = getReactNavigationTheme(
+    colorSchemeName,
+    colorScheme,
+  );
+
+  // Set the background color of the system UI to avoid any color hickups
+  SystemUI.setBackgroundColorAsync(colorScheme.background);
 
   return (
     <CalculationStorageContext.Provider value={calculationStorage}>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider
-          value={colorSchemeName === "dark" ? DarkTheme : DefaultTheme}
-        >
+        <ThemeProvider value={reactNavigationTheme}>
           <Stack
             screenOptions={{
               // Only the back button on all screens
