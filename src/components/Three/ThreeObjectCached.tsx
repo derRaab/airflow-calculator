@@ -1,10 +1,15 @@
 import { MaterialDesign3ColorScheme } from "@/src/themes/m3/MaterialDesign3ColorTheme";
-import { delayAsync } from "@/src/utils/promiseUtils";
 import * as FileSystem from "expo-file-system";
 import { Image } from "expo-image";
 import * as MediaLibrary from "expo-media-library";
 import { FC, useEffect, useRef, useState } from "react";
-import { Platform, ScaledSize, useWindowDimensions, View } from "react-native";
+import {
+  Platform,
+  ScaledSize,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import ViewShot, { captureRef } from "react-native-view-shot";
 import { ThreeObject, ThreeObjectProps } from "./ThreeObject";
 
@@ -18,13 +23,15 @@ const cacheDirectory =
     ? FileSystem.documentDirectory + "cache/three-object-cache/"
     : FileSystem.cacheDirectory + "three-object-cache/";
 
+/*
 const deleteCacheDirectory = async () => {
   console.log("deleteCacheDirectory() : ", cacheDirectory);
   FileSystem.deleteAsync(cacheDirectory, { idempotent: true });
 };
 deleteCacheDirectory();
+*/
+
 const makeCacheDirectory = async () => {
-  console.log("makeCacheDirectory() : ", cacheDirectory);
   FileSystem.makeDirectoryAsync(cacheDirectory, { intermediates: true });
 };
 
@@ -64,9 +71,7 @@ export const ThreeObjectCached: FC<ThreeObjectProps> = ({
     const checkFileExistence = async () => {
       try {
         const cacheUriInCheck = cacheUri;
-        console.log("Checking file existence", cacheUri);
         const fileInfo = await FileSystem.getInfoAsync(cacheUri);
-        console.log("fileInfo", fileInfo);
         if (fileInfo.exists) {
           setExistingCacheUri(cacheUriInCheck);
           setCurrentTask(TASK_SHOW_FILE);
@@ -93,29 +98,16 @@ export const ThreeObjectCached: FC<ThreeObjectProps> = ({
     if (currentTask !== TASK_CREATE_FILE || creatingCacheFileRef.current) {
       return;
     }
-    /*const current = viewShotRef.current as ViewShot;
-    if (!current.capture) {
-      setCurrentTask(TASK_SHOW_FILE);
-      return;
-    }*/
-
     creatingCacheFileRef.current = true;
 
-    const delay = 1000;
-
     try {
-      if (delay) await delayAsync(delay);
       const uri = await captureRef(viewShotRef);
-      if (delay) await delayAsync(delay);
       await makeCacheDirectory();
-      if (delay) await delayAsync(delay);
       await FileSystem.copyAsync({ from: uri, to: cacheUri });
-      console.log("Created the cache file", cacheUri);
-      if (delay) await delayAsync(delay);
       await MediaLibrary.saveToLibraryAsync(cacheUri);
-      console.log("Added saved image to library as well");
-      if (delay) await delayAsync(delay);
       setExistingCacheUri(cacheUri);
+
+      console.log("Created the cache file", cacheUri);
     } catch (error) {
       console.log("Error creating the cache file", error);
     } finally {
@@ -125,7 +117,6 @@ export const ThreeObjectCached: FC<ThreeObjectProps> = ({
   };
 
   const onThreeObjectFirstFrame = async () => {
-    //invokeOnFirstFrame();
     createCacheFile();
   };
 
@@ -137,18 +128,15 @@ export const ThreeObjectCached: FC<ThreeObjectProps> = ({
     invokeOnFirstFrame();
 
     return (
-      <View style={{ width: 300, height: 300, opacity: 0.1 }}>
+      <View style={styles.imageContainer}>
         <Image
-          style={{ width: 300, height: 300 }}
+          cachePolicy={"disk"}
+          contentFit="cover"
           onError={(e) => {
             console.log("Cached image onError", e);
           }}
-          onLoad={(e) => {
-            console.log("Cached image onLoad:", e);
-          }}
           source={{ uri: existingCacheUri }}
-          contentFit="cover"
-          cachePolicy={"disk"}
+          style={styles.image}
         />
       </View>
     );
@@ -166,3 +154,8 @@ export const ThreeObjectCached: FC<ThreeObjectProps> = ({
     </ViewShot>
   );
 };
+
+const styles = StyleSheet.create({
+  image: { width: "100%", height: "100%" },
+  imageContainer: { width: "100%", height: "100%", opacity: 0.1 },
+});
